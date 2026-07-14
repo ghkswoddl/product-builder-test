@@ -1,0 +1,21 @@
+{
+  "name": "product-builder-test",
+  "version": "1.0.0",
+  "description": "프로덕트 빌더를 위한 레포지터리",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ghkswoddl/product-builder-test.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ghkswoddl/product-builder-test/issues"
+  },
+  "homepage": "https://github.com/ghkswoddl/product-builder-test#readme"
+}

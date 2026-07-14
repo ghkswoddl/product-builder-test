@@ -29,7 +29,7 @@
     --desc-fg:#c7c7ca;
     --font-display:'Roboto', sans-serif;
     --font-body:'Noto Sans KR', sans-serif;
-    --bleed-pad:48px; /* 풀-블리드 좌우 여백(안전영역) 기본값 */
+    --bleed-pad:24px; /* 풀-블리드 좌우 여백(안전영역) 기본값 (조정 가능) */
 
     /* 1920x1080 기준 그래픽 안전영역 (title-safe ≈ 90%) */
     --safe-width:1728px;
@@ -128,7 +128,7 @@
   }
 
   /* SECTION LABEL */
-  .section{ margin-bottom:200px; }
+  .section{ margin-bottom:48px; }
   .section-head{ display:flex; align-items:baseline; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
   .section-num{
     font-family:var(--font-display); font-size:13px; font-weight:700; color:var(--pink);
@@ -291,8 +291,8 @@
 
   /* PLANS (컨설팅 플랜 카드) */
   .plans-section{ margin-top:20px; }
-  .plans-grid{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-top:18px; }
-  .plan-card{ flex:1; min-width:220px; max-width:340px; background:linear-gradient(180deg, var(--card), var(--card-hover)); border:1px solid var(--line); border-radius:14px; padding:18px; display:flex; flex-direction:column; gap:12px; }
+  .plans-grid{ display:flex; gap:28px; flex-wrap:wrap; justify-content:center; margin-top:18px; }
+  .plan-card{ flex:1; min-width:220px; max-width:360px; background:linear-gradient(180deg, var(--card), var(--card-hover)); border:1px solid var(--line); border-radius:14px; padding:18px; display:flex; flex-direction:column; gap:12px; min-height:340px; height:340px; justify-content:space-between; }
   .plan-header{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
   .plan-title{ font-family:var(--font-display); font-size:18px; font-weight:700; }
   .plan-price{ font-size:20px; font-weight:800; color:var(--green); }
@@ -301,7 +301,8 @@
   .plan-feature{ display:flex; gap:10px; align-items:flex-start; }
   .plan-feature .dot{ width:8px; height:8px; border-radius:50%; background:var(--pink); margin-top:6px; flex:0 0 8px; }
   .plan-cta{ display:flex; gap:10px; align-items:center; margin-top:8px; }
-  .plan-cta .cta-btn{ padding:10px 14px; font-size:14px; }
+  .plan-cta .cta-btn{ padding:0 18px; font-size:14px; height:48px; display:inline-flex; align-items:center; justify-content:center; }
+  .pay-btn{ background:var(--green); color:#fff; box-shadow:0 12px 30px rgba(29,185,84,0.25); border:none; }
   .plan-note{ font-size:12px; color:var(--muted); }
 
   footer{ text-align:center; margin-top:80px; color:#5c5c60; font-size:12px; }
@@ -431,7 +432,7 @@
       <span class="section-optional-tag">선택</span>
       <span class="section-hint">사진을 올리면 사진에 맞춘 추천을 받을 수 있어요</span>
     </div>
-    <label class="upload-zone fixed-panel full-bleed" id="uploadZone">
+    <label class="upload-zone fixed-panel" id="uploadZone">
       <input type="file" id="photoInput" accept="image/*">
       <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 16V4M12 4 8 8M12 4l4 4"/>
@@ -509,13 +510,13 @@
             <div class="plan-price">무료</div>
           </div>
           <div class="plan-features">
-            <div class="plan-feature"><span class="dot"></span><div>기본 스타일 진단 리포트 (이메일)</div></div>
-            <div class="plan-feature"><span class="dot"></span><div>간단한 사진 기반 피드백</div></div>
-            <div class="plan-feature"><span class="dot"></span><div>학생/신입을 위한 예산 친화적 코디 팁</div></div>
+            <div class="plan-feature"><span class="dot"></span><div>간단한 스타일 진단 리포트(이메일)</div></div>
+            <div class="plan-feature"><span class="dot"></span><div>사진 기반 간단 피드백 제공</div></div>
+            <div class="plan-feature"><span class="dot"></span><div>학생·신입을 위한 예산 중심 코디 팁</div></div>
           </div>
+          <div class="plan-note">대상: 예산을 고려하는 학생·초심자</div>
           <div class="plan-cta">
             <button class="cta-btn secondary" onclick="document.getElementById('consultMessage').focus();">이 플랜으로 상담하기</button>
-            <div class="plan-note">대상: 예산 고려하는 학생·초심자</div>
           </div>
         </div>
 
@@ -528,14 +529,14 @@
             <div class="plan-price">월 17,000원</div>
           </div>
           <div class="plan-features">
-            <div class="plan-feature"><span class="dot"></span><div>상세 퍼스널 스타일 리포트 (PDF)</div></div>
-            <div class="plan-feature"><span class="dot"></span><div>1:1 30분 스타일 콜 (월 1회)</div></div>
-            <div class="plan-feature"><span class="dot"></span><div>옷장 매칭 & 데일리 코디 10일치 제안</div></div>
-            <div class="plan-feature"><span class="dot"></span><div>학생·신입 전용 할인 및 빠른 응답</div></div>
+            <div class="plan-feature"><span class="dot"></span><div>퍼스널 스타일 리포트(PDF)</div></div>
+            <div class="plan-feature"><span class="dot"></span><div>1:1 스타일 콜 30분(월 1회)</div></div>
+            <div class="plan-feature"><span class="dot"></span><div>옷장 매칭 및 10일치 데일리 코디 제안</div></div>
+            <div class="plan-feature"><span class="dot"></span><div>학생·신입 대상 할인 및 우선 응답</div></div>
           </div>
+          <div class="plan-note">대상: 10~30대, 실용적 코디를 선호하는 분</div>
           <div class="plan-cta">
-            <button class="cta-btn" onclick="document.getElementById('consultForm').scrollIntoView({behavior:'smooth'});">이 플랜으로 상담하기</button>
-            <div class="plan-note">대상: 10~30대 실용성 중시 패피</div>
+            <button class="cta-btn pay-btn" onclick="initiateCheckout('pro')">결제하기</button>
           </div>
         </div>
 
@@ -548,14 +549,14 @@
             <div class="plan-price">월 100,000원부터</div>
           </div>
           <div class="plan-features">
-            <div class="plan-feature"><span class="dot"></span><div>심층 스타일 전략 + 시즌별 룩북</div></div>
+            <div class="plan-feature"><span class="dot"></span><div>심층 스타일 전략 및 시즌별 룩북 제공</div></div>
             <div class="plan-feature"><span class="dot"></span><div>퍼스널 쇼퍼 추천 및 구매 가이드</div></div>
-            <div class="plan-feature"><span class="dot"></span><div>월 2회 1:1 스타일 세션 + 우선 예약</div></div>
-            <div class="plan-feature"><span class="dot"></span><div>하이엔드 / 포인트 룩 구성 지원</div></div>
+            <div class="plan-feature"><span class="dot"></span><div>월 2회 1:1 스타일 세션 및 우선 예약</div></div>
+            <div class="plan-feature"><span class="dot"></span><div>하이엔드·포인트 룩 구성 지원</div></div>
           </div>
+          <div class="plan-note">대상: 스타일 심화를 원하거나 쇼핑 대행을 희망하는 분</div>
           <div class="plan-cta">
-            <button class="cta-btn" onclick="document.getElementById('consultForm').scrollIntoView({behavior:'smooth'});">맞춤 상담 요청</button>
-            <div class="plan-note">대상: 스타일 심화 학습·쇼핑 대행 희망자</div>
+            <button class="cta-btn pay-btn" onclick="initiateCheckout('premium')">맞춤 상담/결제</button>
           </div>
         </div>
       </div>
@@ -876,6 +877,14 @@ ${idolLine}` }
     consultStatus.classList.add('show');
     consultForm.reset();
   });
+
+  // 간단한 체크아웃 시작 함수 (실제 결제 연동은 백엔드/결제 게이트웨이 필요)
+  function initiateCheckout(planId){
+    // 예시: 결제 페이지로 리디렉션
+    // 실제 서비스: 서버에서 결제 세션 생성(예: Stripe Checkout Session), 응답의 결제 URL로 리다이렉트합니다.
+    // 여기서는 간단히 쿼리 파라미터를 붙인 체크아웃 페이지를 엽니다.
+    window.location.href = '/checkout.html?plan=' + encodeURIComponent(planId);
+  }
 </script>
 </body>
 </html>

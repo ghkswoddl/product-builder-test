@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>STYLE MATCH — 아이돌 × OOTD 패션 추천</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --void:#0d0d0e;
@@ -26,8 +27,9 @@
     --error-border:rgba(255,61,129,0.3);
     --error-fg:#ff9dbc;
     --desc-fg:#c7c7ca;
-    --font-display:'Space Grotesk', sans-serif;
-    --font-body:'Inter', sans-serif;
+    --font-display:'Roboto', sans-serif;
+    --font-body:'Noto Sans KR', sans-serif;
+    --bleed-pad:48px; /* 풀-블리드 좌우 여백(안전영역) 기본값 */
 
     /* 1920x1080 기준 그래픽 안전영역 (title-safe ≈ 90%) */
     --safe-width:1728px;
@@ -126,7 +128,7 @@
   }
 
   /* SECTION LABEL */
-  .section{ margin-bottom:48px; }
+  .section{ margin-bottom:200px; }
   .section-head{ display:flex; align-items:baseline; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
   .section-num{
     font-family:var(--font-display); font-size:13px; font-weight:700; color:var(--pink);
@@ -188,6 +190,17 @@
   }
   /* 고정된 패널 너비 (업로드 박스와 상담 폼을 동일하게 맞추기 위함) */
   .fixed-panel{ max-width:720px; margin:0 auto; }
+  /* 풀 블리드: 좌우 확장 (upload zone 및 consult form에 적용) - 기준 여백은 --bleed-pad */
+  .upload-zone.full-bleed, .consult-form.full-bleed{
+    max-width:none;
+    width:calc(100% + (var(--bleed-pad) * 2));
+    margin-left:calc(-1 * var(--bleed-pad));
+    margin-right:calc(-1 * var(--bleed-pad));
+    border-radius:10px;
+  }
+  @media (max-width:900px){
+    .upload-zone.full-bleed, .consult-form.full-bleed{ width:100%; margin-left:0; margin-right:0; border-radius:8px; padding-left:18px; padding-right:18px; }
+  }
   .upload-zone.dragover, .upload-zone:hover{ border-color:var(--green); background:var(--card-hover); }
   .upload-zone input[type=file]{ display:none; }
   .upload-zone .upload-icon{ width:34px; height:34px; color:var(--muted); }
@@ -209,15 +222,19 @@
   .cta-group{ display:flex; flex-direction:column; align-items:center; gap:12px; }
   .cta-btn{
     font-family:var(--font-display); font-weight:700; font-size:16px; letter-spacing:0.01em;
-    background:var(--green); color:#06280f; border:none; border-radius:999px;
-    padding:18px 42px; cursor:pointer;
+    background:var(--green); color:#ffffff; border:none; border-radius:10px;
+    height:48px; padding:0 24px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer;
     box-shadow:0 10px 30px -10px rgba(29,185,84,0.55);
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease, color .12s ease;
   }
   .cta-btn:hover:not(:disabled){ transform:translateY(-2px) scale(1.02); background:#22e065; }
   .cta-btn:active:not(:disabled){ transform:translateY(0) scale(0.99); }
   .cta-btn:disabled{ opacity:0.45; cursor:not-allowed; box-shadow:none; }
-  .cta-btn.secondary{ background:transparent; color:var(--pink); border:1.5px solid var(--pink); box-shadow:none; }
-  .cta-btn.secondary:hover:not(:disabled){ background:rgba(255,61,129,0.08); transform:translateY(-2px) scale(1.02); }
+  .cta-btn.secondary{
+    background:transparent; color:var(--off-white); border:1.5px solid rgba(255,61,129,0.16); box-shadow:0 6px 18px rgba(0,0,0,0.08);
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease, color .12s ease;
+  }
+  .cta-btn.secondary:hover:not(:disabled){ background:rgba(255,61,129,0.06); transform:translateY(-3px); box-shadow:0 12px 30px rgba(0,0,0,0.14); color:var(--pink); border-color:var(--pink); }
   .cta-note{ font-size:12.5px; color:var(--muted); text-align:center; max-width:220px; }
 
   /* RESULTS */
@@ -249,7 +266,7 @@
   .error-box{ background:var(--error-bg); border:1px solid var(--error-border); border-radius:14px; padding:18px 20px; color:var(--error-fg); font-size:13.5px; line-height:1.7; }
 
   /* CONSULTING SECTION */
-  .consult-section{ margin-top:96px; padding-top:56px; border-top:1px solid var(--line); }
+  .consult-section{ margin-top:96px; padding-top:56px; border-top:none; }
   .consult-form{
     display:flex; flex-direction:column; gap:16px; background:var(--card); border:1px solid var(--line);
     border-radius:20px; padding:32px; max-width:720px;
@@ -414,7 +431,7 @@
       <span class="section-optional-tag">선택</span>
       <span class="section-hint">사진을 올리면 사진에 맞춘 추천을 받을 수 있어요</span>
     </div>
-    <label class="upload-zone fixed-panel" id="uploadZone">
+    <label class="upload-zone fixed-panel full-bleed" id="uploadZone">
       <input type="file" id="photoInput" accept="image/*">
       <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 16V4M12 4 8 8M12 4l4 4"/>
@@ -454,7 +471,7 @@
       <span class="section-title">스타일 컨설팅 의뢰</span>
       <span class="section-hint">전문 스타일리스트와 1:1로 상담받아보세요</span>
     </div>
-    <form class="consult-form" id="consultForm">
+    <form class="consult-form full-bleed" id="consultForm">
       <div class="form-row">
         <div class="form-field">
           <label for="consultName">작성자</label>
@@ -489,7 +506,7 @@
               <div class="plan-title">Starter (무료)</div>
               <div class="plan-sub">가벼운 스타일 피드백 / 초보자 추천</div>
             </div>
-            <div class="plan-price">$0</div>
+            <div class="plan-price">무료</div>
           </div>
           <div class="plan-features">
             <div class="plan-feature"><span class="dot"></span><div>기본 스타일 진단 리포트 (이메일)</div></div>
@@ -508,7 +525,7 @@
               <div class="plan-title">Pro (맞춤 리포트)</div>
               <div class="plan-sub">월간 구독형 · 실용적 추천</div>
             </div>
-            <div class="plan-price">$17 / month</div>
+            <div class="plan-price">월 17,000원</div>
           </div>
           <div class="plan-features">
             <div class="plan-feature"><span class="dot"></span><div>상세 퍼스널 스타일 리포트 (PDF)</div></div>
@@ -528,7 +545,7 @@
               <div class="plan-title">Premium (퍼스널 VIP)</div>
               <div class="plan-sub">심층 컨설팅 · 쇼핑 지원 포함</div>
             </div>
-            <div class="plan-price">From $100</div>
+            <div class="plan-price">월 100,000원부터</div>
           </div>
           <div class="plan-features">
             <div class="plan-feature"><span class="dot"></span><div>심층 스타일 전략 + 시즌별 룩북</div></div>

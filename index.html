@@ -171,6 +171,7 @@
   .ootd-swatch{
     width:100%; aspect-ratio:1.5; border-radius:10px;
     display:flex; align-items:center; justify-content:center;
+    background:transparent; border:none; padding:0;
   }
   .ootd-swatch svg{ width:32px; height:32px; }
   .ootd-name{ font-weight:700; font-size:14.5px; }
@@ -187,15 +188,17 @@
     border:1.5px dashed var(--line); border-radius:18px; background:var(--card);
     padding:32px 24px; display:flex; flex-direction:column; align-items:center; gap:12px;
     cursor:pointer; text-align:center;
+    max-width:1536px;
+    width:100%;
   }
   /* 고정된 패널 너비 (업로드 박스와 상담 폼을 동일하게 맞추기 위함) */
-  .fixed-panel{ max-width:720px; margin:0 auto; }
+  .fixed-panel{ max-width:1536px; width:100%; margin:0 auto; }
   /* 풀 블리드: 좌우 확장 (upload zone 및 consult form에 적용) - 기준 여백은 --bleed-pad */
   .upload-zone.full-bleed, .consult-form.full-bleed{
-    max-width:none;
-    width:calc(100% + (var(--bleed-pad) * 2));
-    margin-left:calc(-1 * var(--bleed-pad));
-    margin-right:calc(-1 * var(--bleed-pad));
+    max-width:1536px;
+    width:100%;
+    margin-left:auto;
+    margin-right:auto;
     border-radius:10px;
   }
   @media (max-width:900px){
@@ -203,7 +206,7 @@
   }
   .upload-zone.dragover, .upload-zone:hover{ border-color:var(--green); background:var(--card-hover); }
   .upload-zone input[type=file]{ display:none; }
-  .upload-zone .upload-icon{ width:34px; height:34px; color:var(--muted); }
+  .upload-zone .upload-icon{ width:32px; height:32px; color:var(--muted); background:none; padding:0; }
   .upload-zone .upload-text{ font-size:13.5px; color:var(--muted); line-height:1.6; }
   .upload-zone .upload-text b{ color:var(--off-white); }
   .upload-zone .upload-sub{ font-size:11.5px; color:var(--muted); opacity:0.75; }
@@ -266,11 +269,11 @@
   .error-box{ background:var(--error-bg); border:1px solid var(--error-border); border-radius:14px; padding:18px 20px; color:var(--error-fg); font-size:13.5px; line-height:1.7; }
 
   /* CONSULTING SECTION */
-  .consult-section{ margin-top:96px; padding-top:56px; border-top:none; }
+  .consult-section{ margin-top:0; padding-top:56px; border-top:none; }
   .consult-form{
     display:flex; flex-direction:column; gap:16px; background:var(--card); border:1px solid var(--line);
-    border-radius:20px; padding:32px; max-width:720px;
-    margin:0 auto;
+    border-radius:20px; padding:32px; max-width:1536px;
+    width:100%; margin:0 auto;
   }
   .form-row{ display:flex; gap:14px; flex-wrap:wrap; }
   .form-field{ flex:1; min-width:200px; display:flex; flex-direction:column; gap:7px; }
@@ -290,7 +293,7 @@
   .consult-error.show{ display:block; }
 
   /* PLANS (컨설팅 플랜 카드) */
-  .plans-section{ margin-top:20px; }
+  .plans-section{ margin-top:0; padding-top:56px; }
   .plans-grid{ display:flex; gap:28px; flex-wrap:wrap; justify-content:center; margin-top:18px; }
   .plan-card{ flex:1; min-width:220px; max-width:360px; background:linear-gradient(180deg, var(--card), var(--card-hover)); border:1px solid var(--line); border-radius:14px; padding:18px; display:flex; flex-direction:column; gap:12px; min-height:340px; height:340px; justify-content:space-between; }
   .plan-header{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
@@ -630,7 +633,7 @@
   ootdGrid.innerHTML = OOTD_OPTIONS.map(o => `
     <div class="ootd-card" data-key="${o.key}">
       <div class="ootd-check">✓</div>
-      <div class="ootd-swatch" style="background:${o.color}22; border:1px solid ${o.color}55; color:${o.color};">${ICONS[o.key]}</div>
+      <div class="ootd-swatch" style="color:${o.color};">${ICONS[o.key]}</div>
       <div>
         <div class="ootd-name">${o.key}</div>
         <div class="ootd-desc">${o.desc}</div>

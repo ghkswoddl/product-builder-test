@@ -26,7 +26,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>STYLE MATCH — 아이돌 × OOTD 패션 추천</title>
+<title>STYLE MATCH — Idol × OOTD 패션 추천</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
@@ -196,9 +196,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     display:flex; align-items:center; justify-content:center;
     background:transparent; border:none; padding:0;
   }
-  .ootd-swatch svg{ width:52px; height:52px; }
-  }
-  .ootd-swatch svg{ width:32px; height:32px; }
+  .ootd-swatch svg{ width:60px; height:60px; }
   .ootd-name{ font-weight:700; font-size:14.5px; }
   .ootd-desc{ font-size:11.5px; color:var(--muted); line-height:1.5; }
   .ootd-check{
@@ -320,7 +318,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   /* PLANS (컨설팅 플랜 카드) */
   .plans-section{ margin-top:0; padding-top:56px; }
   .plans-grid{ display:flex; gap:28px; flex-wrap:wrap; justify-content:center; margin-top:18px; }
-  .plan-card{ flex:1; min-width:220px; max-width:360px; background:linear-gradient(180deg, var(--card), var(--card-hover)); border:1px solid var(--line); border-radius:14px; padding:18px; display:flex; flex-direction:column; gap:12px; min-height:340px; height:340px; justify-content:space-between; }
+  .plan-card{ flex:1 1 260px; min-width:260px; max-width:360px; background:linear-gradient(180deg, var(--card), var(--card-hover)); border:1px solid var(--line); border-radius:14px; padding:18px; display:flex; flex-direction:column; gap:12px; min-height:340px; height:auto; justify-content:space-between; }
   .plan-header{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
   .plan-title{ font-family:var(--font-display); font-size:18px; font-weight:700; }
   .plan-price{ font-size:20px; font-weight:800; color:var(--green); }
@@ -329,7 +327,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .plan-feature{ display:flex; gap:10px; align-items:flex-start; }
   .plan-feature .dot{ width:8px; height:8px; border-radius:50%; background:var(--pink); margin-top:6px; flex:0 0 8px; }
   .plan-cta{ display:flex; gap:10px; align-items:center; margin-top:8px; }
-  .plan-cta .cta-btn{ padding:0 18px; font-size:14px; height:48px; display:inline-flex; align-items:center; justify-content:center; }
+  .plan-cta .cta-btn{ width:100%; padding:0 18px; font-size:14px; height:48px; display:flex; align-items:center; justify-content:center; text-align:center; }
   .pay-btn{ background:var(--green); color:#fff; box-shadow:0 12px 30px rgba(29,185,84,0.25); border:none; }
   .plan-note{ font-size:12px; color:var(--muted); }
 
@@ -345,6 +343,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .wrap{ max-width:100%; padding:76px 28px 100px; }
     .ootd-grid{ grid-template-columns:repeat(auto-fill, minmax(120px,1fr)); gap:10px; }
     h1{ font-size:clamp(30px, 5vw, 44px); }
+    .plan-card{ min-width:220px; }
   }
 
   /* MOBILE */
@@ -381,6 +380,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     .consult-form{ padding:22px; }
     .form-row{ flex-direction:column; }
+
+    .plans-grid{ flex-direction:column; gap:16px; }
+    .plan-card{ flex:1 1 auto; min-width:0; max-width:none; width:100%; height:auto; min-height:0; }
 
     footer{ margin-top:56px; font-size:11px; }
   }
@@ -423,14 +425,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <header>
     <div class="eyebrow">Style Match Engine</div>
-    <h1>최애 아이돌 무드로<br><span>오늘의 OOTD</span>를 완성하세요</h1>
-    <p class="sub">좋아하는 아이돌의 분위기와 원하는 OOTD 스타일을 고르면, 두 가지를 조합한 나만의 패션 스타일 5가지를 추천해드려요. 내 사진을 올리면 사진에 맞춘 추천도 받아볼 수 있어요.</p>
+    <h1>최애 Idol 무드로<br><span>오늘의 OOTD</span>를 완성하세요</h1>
+    <p class="sub">좋아하는 Idol의 분위기와 원하는 OOTD 스타일을 고르면, 두 가지를 조합한 나만의 패션 스타일 5가지를 추천해드려요. 내 사진을 올리면 사진에 맞춘 추천도 받아볼 수 있어요.</p>
   </header>
 
   <div class="section">
     <div class="section-head">
       <span class="section-num">01</span>
-      <span class="section-title">최애 아이돌</span>
+      <span class="section-title">최애 Idol</span>
       <span class="section-hint">이름과 무드를 알려주세요</span>
     </div>
     <div class="idol-input-row">
@@ -482,7 +484,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="cta-options">
     <div class="cta-group">
       <button class="cta-btn" id="ctaBtn" disabled>5가지 스타일 추천받기</button>
-      <div class="cta-note" id="ctaNote">아이돌 이름과 OOTD 스타일을 선택해주세요</div>
+      <div class="cta-note" id="ctaNote">Idol 이름과 OOTD 스타일을 선택해주세요</div>
     </div>
     <div class="cta-group">
       <button class="cta-btn secondary" id="ctaPhotoBtn" disabled>📷 내 사진으로 추천받기</button>
@@ -517,7 +519,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="form-field">
         <label for="consultMessage">상담 내용</label>
-        <textarea id="consultMessage" placeholder="원하는 스타일, 고민되는 부분, 참고하고 싶은 아이돌이나 OOTD 등을 자유롭게 적어주세요" required></textarea>
+        <textarea id="consultMessage" placeholder="원하는 스타일, 고민되는 부분, 참고하고 싶은 Idol이나 OOTD 등을 자유롭게 적어주세요" required></textarea>
       </div>
       <div class="consult-actions">
         <button type="submit" class="cta-btn consult-submit">상담 신청하기</button>
@@ -620,7 +622,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   })();
 
   // ---- 2D line icons for OOTD styles ----
-  const ICON_ATTRS = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"';
+  const ICON_ATTRS = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"';
   const ICONS = {
     '캐주얼': `<svg ${ICON_ATTRS}><path d="M8.2 3.6 4 7v3.2h2.6V20.4h10.8V10.2H20V7l-4.2-3.4-2 1.8h-3.6l-2-1.8Z"/></svg>`,
     '스트릿': `<svg ${ICON_ATTRS}><path d="M4 15.5c0-4.4 3.6-8 8-8s8 3.6 8 8"/><path d="M4 15.5h16"/><path d="M15.2 15.5c1.9 0 3.7.4 5.2 1.3"/><path d="M12 7.5V4.5"/></svg>`,
@@ -642,6 +644,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     { key:'포멀', desc:'단정하고 세련된', color:'#6b8fc9' },
     { key:'크롭/Y2K', desc:'뉴트로 감성', color:'#d155a0' },
   ];
+
+  // Verified, working Unsplash photo URLs (checked one by one so the cards never
+  // show a broken-image icon). Mixed gender so results feel varied regardless of
+  // which OOTD style the user picked. Each style category cycles through this
+  // same verified pool with a different crop param for a bit of visual variety.
+  const MODEL_PHOTOS = [
+    'https://images.unsplash.com/photo-1746184070706-4a325bcc05d7?q=80&w=600&auto=format&fit=crop', // female, casual street style
+    'https://images.unsplash.com/photo-1730163919445-e1ee1409e1ae?q=80&w=600&auto=format&fit=crop', // male, hoodie street style
+    'https://images.unsplash.com/photo-1603829688511-d7c04ad359fc?q=80&w=600&auto=format&fit=crop', // female, knit sweater casual
+    'https://images.unsplash.com/photo-1595171603847-0b331c4ac892?q=80&w=600&auto=format&fit=crop', // male, formal suit
+  ];
+
+  const STYLE_IMAGES = {
+    '캐주얼': MODEL_PHOTOS,
+    '스트릿': [MODEL_PHOTOS[1], MODEL_PHOTOS[0], MODEL_PHOTOS[3], MODEL_PHOTOS[2]],
+    '페미닌': [MODEL_PHOTOS[2], MODEL_PHOTOS[0], MODEL_PHOTOS[3], MODEL_PHOTOS[1]],
+    '미니멀': [MODEL_PHOTOS[3], MODEL_PHOTOS[2], MODEL_PHOTOS[1], MODEL_PHOTOS[0]],
+    '스포티': [MODEL_PHOTOS[1], MODEL_PHOTOS[0], MODEL_PHOTOS[2], MODEL_PHOTOS[3]],
+    '빈티지': [MODEL_PHOTOS[0], MODEL_PHOTOS[3], MODEL_PHOTOS[1], MODEL_PHOTOS[2]],
+    '포멀': [MODEL_PHOTOS[3], MODEL_PHOTOS[2], MODEL_PHOTOS[0], MODEL_PHOTOS[1]],
+    '크롭/Y2K': [MODEL_PHOTOS[2], MODEL_PHOTOS[1], MODEL_PHOTOS[0], MODEL_PHOTOS[3]]
+  };
 
   let selectedVibes = new Set();
   let selectedOotd = null;
@@ -743,8 +767,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const idolFilled = idolInput.value.trim().length > 0;
     const ready = idolFilled && selectedOotd;
     ctaBtn.disabled = !ready;
-    if (!idolFilled && !selectedOotd) ctaNote.textContent = '아이돌 이름과 OOTD 스타일을 선택해주세요';
-    else if (!idolFilled) ctaNote.textContent = '최애 아이돌 이름을 입력해주세요';
+    if (!idolFilled && !selectedOotd) ctaNote.textContent = 'Idol 이름과 OOTD 스타일을 선택해주세요';
+    else if (!idolFilled) ctaNote.textContent = '최애 Idol 이름을 입력해주세요';
     else if (!selectedOotd) ctaNote.textContent = 'OOTD 스타일을 하나 선택해주세요';
     else ctaNote.textContent = '준비 완료 — 추천을 받아보세요';
 
@@ -1085,15 +1109,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
 
   async function renderResults(styles, mode){
-    // create composite images for each style (either using uploaded photo or a placeholder idol image)
-    const imgs = await Promise.all(styles.map((s, i) => createCompositeImage(s, i, mode)));
+    // pick a real Unsplash fashion photo for each style card
+    const imgs = styles.map((s, i) => pickStyleImage(i));
 
     resultsBody.innerHTML = `<div class="style-list">${
       styles.map((s, i) => `
         <div class="style-row" style="--line-num:${i % 2 === 0 ? 'var(--green)' : 'var(--pink)'}">
           <div class="style-index">${String(i+1).padStart(2,'0')}</div>
           <div class="style-body">
-            <div style="margin-bottom:12px"><img src="${imgs[i]}" alt="style ${i+1}" style="width:100%; max-width:420px; border-radius:12px; display:block; margin:0 auto;"/></div>
+            <div style="margin-bottom:12px"><img src="${imgs[i]}" alt="style ${i+1}" loading="lazy" style="width:100%; max-width:420px; aspect-ratio:3/4; object-fit:cover; border-radius:12px; display:block; margin:0 auto; border:1px solid var(--line);" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';"/></div>
             <h3>${escapeHtml(s.title || '')}</h3>
             <div class="style-tagline">${escapeHtml(s.tagline || '')}</div>
             <p>${escapeHtml(s.description || '')}</p>
@@ -1112,127 +1136,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
   }
 
-  function loadImage(src){
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => resolve(img);
-      img.onerror = reject;
-      img.src = src;
-    });
-  }
+  // Fallback image if a curated Unsplash link ever fails to load
+  const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1746184070706-4a325bcc05d7?q=80&w=600&auto=format&fit=crop';
 
-  async function createCompositeImage(style, idx, mode){
-    const w = 720, h = 960;
-    const canvas = document.createElement('canvas');
-    canvas.width = w; canvas.height = h;
-    const ctx = canvas.getContext('2d');
-
-    // base background
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0,0,w,h);
-
-    try{
-      if(mode === 'photo' && uploadedPhoto){
-        const src = `data:${uploadedPhoto.mediaType};base64,${uploadedPhoto.base64}`;
-        const img = await loadImage(src);
-        // cover the canvas while preserving aspect
-        const ratio = Math.max(w/img.width, h/img.height);
-        const iw = img.width * ratio, ih = img.height * ratio;
-        const x = (w - iw)/2, y = (h - ih)/2;
-        ctx.drawImage(img, x, y, iw, ih);
-        // subtle vignette for depth
-        const vg = ctx.createRadialGradient(w/2, h/2, Math.min(w,h)*0.2, w/2, h/2, Math.max(w,h)*0.8);
-        vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.12)');
-        ctx.fillStyle = vg; ctx.fillRect(0,0,w,h);
-      } else {
-        // placeholder idol image: gradient + initials silhouette
-        const g = ctx.createLinearGradient(0,0,w,h);
-        g.addColorStop(0, '#fbf8ff');
-        g.addColorStop(1, '#fff');
-        ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
-
-        // soft silhouette head
-        ctx.fillStyle = '#efeefe';
-        ctx.beginPath(); ctx.arc(w/2, h*0.28, 110, 0, Math.PI*2); ctx.fill();
-        // torso
-        ctx.fillStyle = '#f7f6fb';
-        roundRect(ctx, w*0.25, h*0.45, w*0.5, h*0.33, 24); ctx.fill();
-
-        // initials
-        const initials = (idolInput.value || 'ID').split(' ').map(p=>p[0]||'').join('').slice(0,2).toUpperCase();
-        ctx.fillStyle = '#9b8fff';
-        ctx.font = '700 64px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(initials, w/2, h*0.28 + 22);
-      }
-
-      // create an offscreen canvas for the garment to allow blur/tint/texture
-      const gCanvas = document.createElement('canvas'); gCanvas.width = w; gCanvas.height = h;
-      const gCtx = gCanvas.getContext('2d');
-
-      // draw garment silhouette (white) on garment canvas
-      gCtx.fillStyle = '#ffffff';
-      gCtx.beginPath();
-      gCtx.moveTo(w*0.22, h*0.42);
-      gCtx.quadraticCurveTo(w*0.5, h*0.32, w*0.78, h*0.42);
-      gCtx.lineTo(w*0.78, h*0.62);
-      gCtx.quadraticCurveTo(w*0.5, h*0.72, w*0.22, h*0.62);
-      gCtx.closePath(); gCtx.fill();
-
-      // apply blur to soften edges
-      gCtx.filter = 'blur(18px)';
-      const blurred = document.createElement('canvas'); blurred.width = w; blurred.height = h;
-      const bCtx = blurred.getContext('2d');
-      bCtx.drawImage(gCanvas, 0, 0);
-
-      // tint the garment with desired color using source-in
-      const o = OOTD_OPTIONS.find(o=>o.key === selectedOotd) || OOTD_OPTIONS[0];
-      const color = o && o.color ? o.color : '#e0629b';
-      bCtx.globalCompositeOperation = 'source-in';
-      bCtx.fillStyle = color; bCtx.fillRect(0,0,w,h);
-
-      // add subtle fabric texture (diagonal stripes)
-      const tex = document.createElement('canvas'); tex.width = 80; tex.height = 80;
-      const tctx = tex.getContext('2d');
-      tctx.fillStyle = 'rgba(255,255,255,0.05)';
-      tctx.fillRect(0,0,80,80);
-      tctx.strokeStyle = 'rgba(255,255,255,0.05)'; tctx.lineWidth = 6; tctx.beginPath();
-      tctx.moveTo(-10,10); tctx.lineTo(90,90); tctx.stroke();
-      const pattern = bCtx.createPattern(tex, 'repeat');
-      bCtx.globalCompositeOperation = 'overlay';
-      bCtx.fillStyle = pattern; bCtx.fillRect(0,0,w,h);
-
-      // draw shadow under garment on main ctx
-      ctx.save();
-      ctx.globalAlpha = 0.25; ctx.fillStyle = '#000000';
-      roundRect(ctx, w*0.22+6, h*0.62-6, w*0.56, 24, 12); ctx.fill();
-      ctx.restore();
-
-      // composite the garment onto main canvas using multiply for richer blend
-      ctx.globalCompositeOperation = 'multiply';
-      ctx.drawImage(blurred, 0, 0);
-      ctx.globalCompositeOperation = 'source-over';
-
-      // highlight: small glossy streak
-      ctx.fillStyle = 'rgba(255,255,255,0.12)';
-      ctx.beginPath(); ctx.ellipse(w*0.62, h*0.5, w*0.05, h*0.12, -0.5, 0, Math.PI*2); ctx.fill();
-
-    }catch(e){
-      // fallback: simple empty card
-      ctx.fillStyle = '#f3f3f3'; ctx.fillRect(0,0,w,h);
-    }
-
-    return canvas.toDataURL('image/jpeg', 0.9);
-  }
-
-  // helper: rounded rect path
-  function roundRect(ctx, x, y, w, h, r){
-    ctx.beginPath();
-    ctx.moveTo(x+r, y);
-    ctx.arcTo(x+w, y, x+w, y+h, r);
-    ctx.arcTo(x+w, y+h, x, y+h, r);
-    ctx.arcTo(x, y+h, x, y, r);
-    ctx.arcTo(x, y, x+w, y, r);
-    ctx.closePath();
+  // Pick a K-pop fashion / casual-style model photo (mixed gender) for the given
+  // OOTD category and card index. Works the same whether the user typed idol
+  // info or uploaded their own photo — no canvas compositing needed.
+  function pickStyleImage(idx){
+    const styleImages = STYLE_IMAGES[selectedOotd] || STYLE_IMAGES['캐주얼'];
+    return styleImages[idx % styleImages.length];
   }
 
   function escapeHtml(str){

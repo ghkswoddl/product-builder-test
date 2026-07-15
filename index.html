@@ -1141,43 +1141,80 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         const iw = img.width * ratio, ih = img.height * ratio;
         const x = (w - iw)/2, y = (h - ih)/2;
         ctx.drawImage(img, x, y, iw, ih);
+        // subtle vignette for depth
+        const vg = ctx.createRadialGradient(w/2, h/2, Math.min(w,h)*0.2, w/2, h/2, Math.max(w,h)*0.8);
+        vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.12)');
+        ctx.fillStyle = vg; ctx.fillRect(0,0,w,h);
       } else {
         // placeholder idol image: gradient + initials silhouette
         const g = ctx.createLinearGradient(0,0,w,h);
-        g.addColorStop(0, '#f6f5ff');
+        g.addColorStop(0, '#fbf8ff');
         g.addColorStop(1, '#fff');
         ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
 
-        // silhouette head
+        // soft silhouette head
         ctx.fillStyle = '#efeefe';
         ctx.beginPath(); ctx.arc(w/2, h*0.28, 110, 0, Math.PI*2); ctx.fill();
         // torso
         ctx.fillStyle = '#f7f6fb';
-        ctx.fillRect(w*0.25, h*0.45, w*0.5, h*0.33);
+        roundRect(ctx, w*0.25, h*0.45, w*0.5, h*0.33, 24); ctx.fill();
 
         // initials
         const initials = (idolInput.value || 'ID').split(' ').map(p=>p[0]||'').join('').slice(0,2).toUpperCase();
-        ctx.fillStyle = '#bdb7ff';
-        ctx.font = 'bold 64px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(initials, w/2, h*0.28 + 20);
+        ctx.fillStyle = '#9b8fff';
+        ctx.font = '700 64px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(initials, w/2, h*0.28 + 22);
       }
 
-      // clothing overlay: a simple stylized shape using OOTD color or fallback
+      // create an offscreen canvas for the garment to allow blur/tint/texture
+      const gCanvas = document.createElement('canvas'); gCanvas.width = w; gCanvas.height = h;
+      const gCtx = gCanvas.getContext('2d');
+
+      // draw garment silhouette (white) on garment canvas
+      gCtx.fillStyle = '#ffffff';
+      gCtx.beginPath();
+      gCtx.moveTo(w*0.22, h*0.42);
+      gCtx.quadraticCurveTo(w*0.5, h*0.32, w*0.78, h*0.42);
+      gCtx.lineTo(w*0.78, h*0.62);
+      gCtx.quadraticCurveTo(w*0.5, h*0.72, w*0.22, h*0.62);
+      gCtx.closePath(); gCtx.fill();
+
+      // apply blur to soften edges
+      gCtx.filter = 'blur(18px)';
+      const blurred = document.createElement('canvas'); blurred.width = w; blurred.height = h;
+      const bCtx = blurred.getContext('2d');
+      bCtx.drawImage(gCanvas, 0, 0);
+
+      // tint the garment with desired color using source-in
       const o = OOTD_OPTIONS.find(o=>o.key === selectedOotd) || OOTD_OPTIONS[0];
       const color = o && o.color ? o.color : '#e0629b';
-      ctx.fillStyle = color;
-      ctx.globalAlpha = 0.9;
-      // draw a simple top overlay (shirt/jacket)
-      ctx.beginPath();
-      ctx.moveTo(w*0.22, h*0.42);
-      ctx.quadraticCurveTo(w*0.5, h*0.32, w*0.78, h*0.42);
-      ctx.lineTo(w*0.78, h*0.62);
-      ctx.quadraticCurveTo(w*0.5, h*0.72, w*0.22, h*0.62);
-      ctx.closePath(); ctx.fill();
-      ctx.globalAlpha = 1;
+      bCtx.globalCompositeOperation = 'source-in';
+      bCtx.fillStyle = color; bCtx.fillRect(0,0,w,h);
 
-      // small decorative accent
-      ctx.fillStyle = 'rgba(255,255,255,0.18)';
-      ctx.fillRect(w*0.5, h*0.46, w*0.08, h*0.18);
+      // add subtle fabric texture (diagonal stripes)
+      const tex = document.createElement('canvas'); tex.width = 80; tex.height = 80;
+      const tctx = tex.getContext('2d');
+      tctx.fillStyle = 'rgba(255,255,255,0.05)';
+      tctx.fillRect(0,0,80,80);
+      tctx.strokeStyle = 'rgba(255,255,255,0.05)'; tctx.lineWidth = 6; tctx.beginPath();
+      tctx.moveTo(-10,10); tctx.lineTo(90,90); tctx.stroke();
+      const pattern = bCtx.createPattern(tex, 'repeat');
+      bCtx.globalCompositeOperation = 'overlay';
+      bCtx.fillStyle = pattern; bCtx.fillRect(0,0,w,h);
+
+      // draw shadow under garment on main ctx
+      ctx.save();
+      ctx.globalAlpha = 0.25; ctx.fillStyle = '#000000';
+      roundRect(ctx, w*0.22+6, h*0.62-6, w*0.56, 24, 12); ctx.fill();
+      ctx.restore();
+
+      // composite the garment onto main canvas using multiply for richer blend
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.drawImage(blurred, 0, 0);
+      ctx.globalCompositeOperation = 'source-over';
+
+      // highlight: small glossy streak
+      ctx.fillStyle = 'rgba(255,255,255,0.12)';
+      ctx.beginPath(); ctx.ellipse(w*0.62, h*0.5, w*0.05, h*0.12, -0.5, 0, Math.PI*2); ctx.fill();
 
     }catch(e){
       // fallback: simple empty card
@@ -1185,6 +1222,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
 
     return canvas.toDataURL('image/jpeg', 0.9);
+  }
+
+  // helper: rounded rect path
+  function roundRect(ctx, x, y, w, h, r){
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.arcTo(x+w, y, x+w, y+h, r);
+    ctx.arcTo(x+w, y+h, x, y+h, r);
+    ctx.arcTo(x, y+h, x, y, r);
+    ctx.arcTo(x, y, x+w, y, r);
+    ctx.closePath();
   }
 
   function escapeHtml(str){

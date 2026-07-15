@@ -801,7 +801,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     try {
       await new Promise(resolve => setTimeout(resolve, 700));
       const styles = generateLocalStyles(mode, ootd, idol || '스타일', vibeText);
-      renderResults(styles);
+      await renderResults(styles, mode);
     } catch (err) {
       console.error(err);
       resultsBody.innerHTML = `
@@ -1084,12 +1084,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }));
   }
 
-  function renderResults(styles){
+  async function renderResults(styles, mode){
+    // create composite images for each style (either using uploaded photo or a placeholder idol image)
+    const imgs = await Promise.all(styles.map((s, i) => createCompositeImage(s, i, mode)));
+
     resultsBody.innerHTML = `<div class="style-list">${
       styles.map((s, i) => `
         <div class="style-row" style="--line-num:${i % 2 === 0 ? 'var(--green)' : 'var(--pink)'}">
           <div class="style-index">${String(i+1).padStart(2,'0')}</div>
           <div class="style-body">
+            <div style="margin-bottom:12px"><img src="${imgs[i]}" alt="style ${i+1}" style="width:100%; max-width:420px; border-radius:12px; display:block; margin:0 auto;"/></div>
             <h3>${escapeHtml(s.title || '')}</h3>
             <div class="style-tagline">${escapeHtml(s.tagline || '')}</div>
             <p>${escapeHtml(s.description || '')}</p>
@@ -1106,6 +1110,81 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         setTimeout(() => row.classList.add('show'), i * 110);
       });
     });
+  }
+
+  function loadImage(src){
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = src;
+    });
+  }
+
+  async function createCompositeImage(style, idx, mode){
+    const w = 720, h = 960;
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext('2d');
+
+    // base background
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0,0,w,h);
+
+    try{
+      if(mode === 'photo' && uploadedPhoto){
+        const src = `data:${uploadedPhoto.mediaType};base64,${uploadedPhoto.base64}`;
+        const img = await loadImage(src);
+        // cover the canvas while preserving aspect
+        const ratio = Math.max(w/img.width, h/img.height);
+        const iw = img.width * ratio, ih = img.height * ratio;
+        const x = (w - iw)/2, y = (h - ih)/2;
+        ctx.drawImage(img, x, y, iw, ih);
+      } else {
+        // placeholder idol image: gradient + initials silhouette
+        const g = ctx.createLinearGradient(0,0,w,h);
+        g.addColorStop(0, '#f6f5ff');
+        g.addColorStop(1, '#fff');
+        ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+
+        // silhouette head
+        ctx.fillStyle = '#efeefe';
+        ctx.beginPath(); ctx.arc(w/2, h*0.28, 110, 0, Math.PI*2); ctx.fill();
+        // torso
+        ctx.fillStyle = '#f7f6fb';
+        ctx.fillRect(w*0.25, h*0.45, w*0.5, h*0.33);
+
+        // initials
+        const initials = (idolInput.value || 'ID').split(' ').map(p=>p[0]||'').join('').slice(0,2).toUpperCase();
+        ctx.fillStyle = '#bdb7ff';
+        ctx.font = 'bold 64px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(initials, w/2, h*0.28 + 20);
+      }
+
+      // clothing overlay: a simple stylized shape using OOTD color or fallback
+      const o = OOTD_OPTIONS.find(o=>o.key === selectedOotd) || OOTD_OPTIONS[0];
+      const color = o && o.color ? o.color : '#e0629b';
+      ctx.fillStyle = color;
+      ctx.globalAlpha = 0.9;
+      // draw a simple top overlay (shirt/jacket)
+      ctx.beginPath();
+      ctx.moveTo(w*0.22, h*0.42);
+      ctx.quadraticCurveTo(w*0.5, h*0.32, w*0.78, h*0.42);
+      ctx.lineTo(w*0.78, h*0.62);
+      ctx.quadraticCurveTo(w*0.5, h*0.72, w*0.22, h*0.62);
+      ctx.closePath(); ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // small decorative accent
+      ctx.fillStyle = 'rgba(255,255,255,0.18)';
+      ctx.fillRect(w*0.5, h*0.46, w*0.08, h*0.18);
+
+    }catch(e){
+      // fallback: simple empty card
+      ctx.fillStyle = '#f3f3f3'; ctx.fillRect(0,0,w,h);
+    }
+
+    return canvas.toDataURL('image/jpeg', 0.9);
   }
 
   function escapeHtml(str){

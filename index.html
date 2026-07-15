@@ -173,6 +173,8 @@
     display:flex; align-items:center; justify-content:center;
     background:transparent; border:none; padding:0;
   }
+  .ootd-swatch svg{ width:52px; height:52px; }
+  }
   .ootd-swatch svg{ width:32px; height:32px; }
   .ootd-name{ font-weight:700; font-size:14.5px; }
   .ootd-desc{ font-size:11.5px; color:var(--muted); line-height:1.5; }
@@ -341,7 +343,7 @@
     .chip{ font-size:12.5px; padding:8px 13px; }
 
     .ootd-grid{ grid-template-columns:repeat(2, 1fr); }
-    .ootd-swatch svg{ width:26px; height:26px; }
+    .ootd-swatch svg{ width:40px; height:40px; }
     .ootd-name{ font-size:13.5px; }
     .ootd-desc{ font-size:11px; }
 
@@ -633,7 +635,7 @@
   ootdGrid.innerHTML = OOTD_OPTIONS.map(o => `
     <div class="ootd-card" data-key="${o.key}">
       <div class="ootd-check">✓</div>
-      <div class="ootd-swatch" style="color:${o.color};">${ICONS[o.key]}</div>
+      <div class="ootd-swatch" style="color:var(--muted);">${ICONS[o.key]}</div>
       <div>
         <div class="ootd-name">${o.key}</div>
         <div class="ootd-desc">${o.desc}</div>
@@ -760,54 +762,18 @@
     resultsEl.style.display = 'block';
     resultsTag.textContent = mode === 'photo'
       ? `사진 기반 · OOTD: ${ootd}`
-      : `텍스트 기반 · ${idol} × ${ootd}`;
+      : `텍스트 기반 · ${idol || '사용자'} × ${ootd}`;
     resultsBody.innerHTML = `
       <div class="loading-wrap">
         <div class="spinner"></div>
-        <div class="loading-text">${mode === 'photo' ? '사진과 ' + ootd + ' 스타일을 분석하는 중...' : idol + '의 무드와 ' + ootd + ' 스타일을 조합하는 중...'}</div>
+        <div class="loading-text">${mode === 'photo' ? '사진과 ' + ootd + ' 스타일을 분석하는 중...' : (idol || '입력하신') + ' 무드와 ' + ootd + ' 스타일을 조합하는 중...'}</div>
       </div>
     `;
     resultsEl.scrollIntoView({ behavior:'smooth', block:'start' });
 
-    let messageContent;
-    if (mode === 'photo') {
-      const idolLine = idol ? `참고하고 싶은 아이돌 무드: ${idol} (${vibeText})` : '';
-      messageContent = [
-        { type:'image', source:{ type:'base64', media_type:uploadedPhoto.mediaType, data:uploadedPhoto.base64 } },
-        { type:'text', text:`이 사진 속 인물의 전체적인 톤과 분위기를 참고해서, 아래 OOTD 스타일 방향에 맞는 패션 스타일 5가지를 추천해주세요.
-원하는 OOTD 스타일: ${ootd}
-${idolLine}` }
-      ];
-    } else {
-      messageContent = `최애 아이돌: ${idol}
-아이돌 무드: ${vibeText}
-원하는 OOTD 스타일: ${ootd}
-
-이 조합에 어울리는 패션 스타일 5가지를 추천해주세요.`;
-    }
-
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-6",
-          max_tokens: 1500,
-          system: SYSTEM_PROMPT_BASE,
-          messages: [{ role: "user", content: messageContent }]
-        })
-      });
-
-      if (!response.ok) throw new Error(`API 오류: ${response.status}`);
-      const data = await response.json();
-      const textBlock = data.content.find(b => b.type === 'text');
-      if (!textBlock) throw new Error('응답을 받지 못했습니다');
-
-      let cleaned = textBlock.text.trim().replace(/^```json\s*|^```\s*|```\s*$/g, '');
-      const parsed = JSON.parse(cleaned);
-      const styles = parsed.styles || [];
-      if (styles.length === 0) throw new Error('추천 결과가 비어있습니다');
-
+      await new Promise(resolve => setTimeout(resolve, 700));
+      const styles = generateLocalStyles(mode, ootd, idol || '스타일', vibeText);
       renderResults(styles);
     } catch (err) {
       console.error(err);
@@ -820,6 +786,275 @@ ${idolLine}` }
     } finally {
       updateCta();
     }
+  }
+
+  function generateLocalStyles(mode, ootd, idol, vibeText){
+    const templates = {
+      '캐주얼': [
+        {
+          title: '데일리 무드',
+          tagline: `${ootd}의 편안함을 살린 소프트 캐주얼`,
+          description: `${idol}의 ${vibeText}를 담아 일상에서 입기 좋은 편안한 코디를 제안합니다. 가볍고 부드러운 소재 위주로 산뜻하게 연출할 수 있어요.`,
+          items: ['화이트 티셔츠', '연청 데님 팬츠', '스니커즈', '미니 크로스백', '심플 실버 액세서리']
+        },
+        {
+          title: '브리즈 레이어',
+          tagline: '초여름처럼 가볍고 시원한 레이어링',
+          description: `가벼운 셔츠와 니트 베스트를 조합해 ${ootd} 스타일을 자연스럽게 녹여냅니다. 활동성 높은 하루에도 잘 어울립니다.`,
+          items: ['베이지 셔츠', '크림 니트 베스트', '와이드 슬랙스', '화이트 스니커즈', '캔버스 토트백']
+        },
+        {
+          title: '모던 스트릿',
+          tagline: '심플하면서도 감각적인 캐주얼',
+          description: `${idol}의 이미지를 떨어뜨리지 않으면서도 도심 속에서도 편안한 룩을 완성합니다. 기본 아이템을 조화롭게 매치하는 것이 포인트예요.`,
+          items: ['블랙 크루넥 티셔츠', '그레이 조거 팬츠', '하이탑 스니커즈', '레이어드 목걸이', '블랙 버킷 햇']
+        },
+        {
+          title: '플레인 컴포트',
+          tagline: '기본에 충실한 깔끔한 일상룩',
+          description: `부담 없이 입기 좋은 베이식 스타일로, ${vibeText}을 자연스럽게 표현하는 조합입니다. 편안함과 완성도를 함께 살려줍니다.`,
+          items: ['크림 니트', '네이비 치노 팬츠', '로퍼', '레더 벨트', '미니 숄더백']
+        },
+        {
+          title: '온더고 캐주얼',
+          tagline: '출근길, 산책 모두 어울리는 실용룩',
+          description: `${ootd} 스타일을 살리면서도 활동적인 하루를 위한 실용적인 코디에 초점을 맞췄습니다.`,
+          items: ['그래픽 티셔츠', '카키 카고 팬츠', '화이트 슬립온', '캡 모자', '톤온톤 크로스백']
+        }
+      ],
+      '스트릿': [
+        {
+          title: '어반 에지',
+          tagline: '도시적인 스트릿 시그니처',
+          description: `${idol}의 존재감을 살리는 과감한 실루엣과 믹스 매치로, 거리에서도 돋보이는 스타일입니다.`,
+          items: ['오버사이즈 후디', '블랙 와이드 팬츠', '하이탑 스니커즈', '체인 목걸이', '캡 모자']
+        },
+        {
+          title: '스포티 셋업',
+          tagline: '활동적이고 트렌디한 스트릿 룩',
+          description: `스포티한 무드에 스트릿 감성을 더해 ${ootd} 스타일을 강조합니다. 편안하면서도 비주얼이 강한 조합입니다.`,
+          items: ['로고 티셔츠', '트랙 팬츠', '러닝 슈즈', '숄더 백', '썬글라스']
+        },
+        {
+          title: '믹스 앤 매치',
+          tagline: '다양한 소재의 유니크한 매치',
+          description: `텍스처 대비와 컬러 포인트로 ${vibeText}를 효과적으로 표현합니다.`,
+          items: ['레더 재킷', '그레이 스웻팬츠', '화이트 부츠', '버킷 햇', '미니 백']
+        },
+        {
+          title: '레이어드 스트릿',
+          tagline: '계절감 있는 복합적인 레이어링',
+          description: `셔츠와 후디, 아우터를 조합해 입체감을 주는 방식으로, 스트릿 스타일의 깊이를 더합니다.`,
+          items: ['후디', '체크 셔츠', '블랙 진', '캔버스 스니커즈', '백팩']
+        },
+        {
+          title: '인디비주얼 포인트',
+          tagline: '작은 디테일로 완성되는 룩',
+          description: `${ootd}을 따라하면서도 개인적인 감성이 드러나는 아이템을 선택했습니다.`,
+          items: ['프린트 티셔츠', '카고 조거', '레더 스니커즈', '볼캡', '미니 크로스백']
+        }
+      ],
+      '페미닌': [
+        {
+          title: '로맨틱 데이트',
+          tagline: '부드럽고 사랑스러운 페미닌',
+          description: `부드러운 컬러와 실루엣으로 ${idol}의 여리한 무드를 담아냈습니다. 데이트와 특별한 날에 잘 어울리는 조합입니다.`,
+          items: ['레이스 블라우스', '플로럴 스커트', '스트랩 샌들', '미니 백', '진주 이어링']
+        },
+        {
+          title: '소프트 시크',
+          tagline: '깨끗하면서도 여성스러운 무드',
+          description: `깔끔한 라인과 은은한 디테일로 ${vibeText}을 표현하는 스타일입니다.`,
+          items: ['크림 니트', '슬림핏 슬랙스', '로퍼', '토트백', '골드 뱅글']
+        },
+        {
+          title: '파스텔 무드',
+          tagline: '산뜻한 컬러감이 돋보이는 룩',
+          description: `${ootd}의 페미닌 감성을 파스텔 톤으로 더욱 부드럽게 연출합니다.`,
+          items: ['파스텔 니트', '플레어 미디 스커트', '플랫 슈즈', '리본 헤어밴드', '미니 숄더백']
+        },
+        {
+          title: '클래식 여성미',
+          tagline: '우아하고 정돈된 페미닌',
+          description: `구조감 있는 재킷과 스커트 조합으로 격식 있는 자리에도 어울리는 스타일입니다.`,
+          items: ['테일러드 블레이저', '화이트 셔츠', '미디 스커트', '힐', '가죽 토트백']
+        },
+        {
+          title: '데일리 로맨스',
+          tagline: '편안하면서도 여성스러운 분위기',
+          description: `자연스럽고 가벼운 실루엣으로 ${idol}의 부드러운 무드를 담았습니다.`,
+          items: ['실크 블라우스', '와이드 팬츠', '슬링백', '미니 백', '진주 목걸이']
+        }
+      ],
+      '미니멀': [
+        {
+          title: '모던 베이식',
+          tagline: '차분하고 깔끔한 미니멀',
+          description: `${ootd}에 걸맞게 과하지 않은 선과 단정한 톤으로 심플한 스타일을 완성합니다.`,
+          items: ['화이트 셔츠', '베이지 슬랙스', '블랙 로퍼', '레더 벨트', '메탈 워치']
+        },
+        {
+          title: '모노톤 실루엣',
+          tagline: '단일 색조로 정돈된 룩',
+          description: `모노톤으로 통일감을 주어 세련된 인상을 주는 스타일입니다.`,
+          items: ['블랙 티셔츠', '차콜 팬츠', '화이트 스니커즈', '크로스백', '심플 이어링']
+        },
+        {
+          title: '에센셜 레이어',
+          tagline: '필수 아이템만으로 완성하는 깔끔함',
+          description: `필수 아이템을 중심으로 깔끔한 레이어링을 구성해 ${vibeText}을 표현합니다.`,
+          items: ['캐시미어 니트', '크림 팬츠', '미니멀 슬립온', '토트백', '베이직 스카프']
+        },
+        {
+          title: '스마트 웨어',
+          tagline: '포멀과 캐주얼의 균형',
+          description: `정제된 실루엣과 깔끔한 디테일로 데일리 오피스룩처럼 활용하기 좋은 조합입니다.`,
+          items: ['화이트 셔츠', '다크 그레이 슬랙스', '스퀘어 토', '레더 벨트', '미니멀 백팩']
+        },
+        {
+          title: '클린 컨투어',
+          tagline: '깨끗한 라인이 돋보이는 스타일',
+          description: `불필요한 장식을 줄이고 단정한 실루엣으로 편안함을 살렸습니다.`,
+          items: ['크림 티셔츠', '슬림 블랙 진', '로퍼', '레더 백', '블랙 선글라스']
+        }
+      ],
+      '스포티': [
+        {
+          title: '액티브 스트리트',
+          tagline: '활동적인 에너지가 느껴지는 스포티',
+          description: `${ootd}을 살리면서도 운동감 있는 요소를 더해 경쾌한 룩을 연출합니다.`,
+          items: ['테크 소재 후디', '트랙 팬츠', '러닝 슈즈', '웨이스트 백', '스포츠 캡']
+        },
+        {
+          title: '캐주얼 애슬레저',
+          tagline: '편안하면서도 멋스러운 운동복 스타일',
+          description: `일상에서도 자연스럽게 입기 좋은 스포티 감성의 코디입니다.`,
+          items: ['그래픽 맨투맨', '레깅스', '화이트 스니커즈', '백팩', '스포츠 워치']
+        },
+        {
+          title: '라인업 룩',
+          tagline: '깔끔한 실루엣과 활동성 강조',
+          description: `심플한 컬러 블록으로 구성해 전체적인 균형감이 좋은 스타일입니다.`,
+          items: ['슬림 집업', '조거 팬츠', '운동화', '미니 크로스백', '헤어밴드']
+        },
+        {
+          title: '스웻 하이브',
+          tagline: '숨쉬기 좋은 스포티 데일리',
+          description: `부드러운 스웻웨어와 함께 일상 속 활동성을 높인 코디입니다.`,
+          items: ['스웻셔츠', '트레이닝 팬츠', '슬립온', '버킷 햇', '미니 백팩']
+        },
+        {
+          title: '퓨처 플레이',
+          tagline: '테크 웨어 감성의 스포티',
+          description: `미니멀한 디테일과 기능성 소재로 감각적인 스포티 룩을 완성합니다.`,
+          items: ['네오프렌 톱', '카고 쇼츠', '볼캡', '하이탑 스니커즈', '슬링 백']
+        }
+      ],
+      '빈티지': [
+        {
+          title: '레트로 클래식',
+          tagline: '골드 디테일이 돋보이는 빈티지',
+          description: `${ootd}을 빈티지 감성으로 풀어낸 클래식한 조합입니다.`,
+          items: ['트위드 재킷', '플레어 스커트', '로퍼', '브라운 레더 백', '빈티지 이어링']
+        },
+        {
+          title: '어번 빈티지',
+          tagline: '도시적인 감성의 레트로 믹스',
+          description: `빈티지한 색감과 모던한 실루엣을 조합해 세련된 빈티지 룩을 연출합니다.`,
+          items: ['오버셔츠', '코듀로이 팬츠', '앵클 부츠', '레이어드 넥리스', '캔버스 백']
+        },
+        {
+          title: '뮤직 페스티벌',
+          tagline: '자유로운 감성의 빈티지 믹스',
+          description: `자유롭고 자연스러운 무드를 살린 스타일로 ${vibeText}에 잘 어울립니다.`,
+          items: ['프린트 티셔츠', '빈티지 데님', '벨트 백', '선글라스', '키 체인']
+        },
+        {
+          title: '레트로 데이트',
+          tagline: '부드러운 색감의 감성 룩',
+          description: `따뜻한 톤과 빈티지한 디테일로 편안한 데이트 룩을 완성합니다.`,
+          items: ['니트 스웨터', '체크 스커트', '로퍼', '미니 백', '헤어핀']
+        },
+        {
+          title: '아카이브 피크',
+          tagline: '오래된 분위기를 현대적으로 재해석',
+          description: `${ootd}을 기반으로 빈티지 소재를 믹스매치해 개성을 더한 스타일입니다.`,
+          items: ['브라운 레더 재킷', '와이드 데님', '워커 부츠', '크로스백', '빈티지 시계']
+        }
+      ],
+      '포멀': [
+        {
+          title: '오피스 엘레강스',
+          tagline: '단정하면서도 세련된 포멀',
+          description: `${idol}의 이미지에 맞춰 단정한 포멀 룩을 제안합니다. 중요한 미팅이나 일정에 안정적인 인상을 줍니다.`,
+          items: ['테일러드 블레이저', '화이트 셔츠', '슬림 팬츠', '펌프스', '레더 토트백']
+        },
+        {
+          title: '모던 레이어',
+          tagline: '깔끔한 실루엣의 포멀 레이어링',
+          description: `심플한 컬러와 구조감 있는 아이템으로 포멀하면서도 여유있는 무드를 냅니다.`,
+          items: ['니트 베스트', '와이드 슬랙스', '로퍼', '미니멀 벨트', '클러치백']
+        },
+        {
+          title: '이브닝 시티',
+          tagline: '도시적인 저녁 외출룩',
+          description: `포멀한 분위기에 은은한 포인트로 우아한 느낌을 연출합니다.`,
+          items: ['블랙 드레스', '스트랩 힐', '메탈릭 백', '심플 이어링', '클래식 코트']
+        },
+        {
+          title: '브런치 포멀',
+          tagline: '편안하고 단정한 세미 포멀',
+          description: `격식과 편안함을 모두 갖춘 스타일로, 가벼운 회식이나 브런치에 잘 어울립니다.`,
+          items: ['라이트 블레이저', '니트 톱', '플리츠 스커트', '플랫 슈즈', '숄더 백']
+        },
+        {
+          title: '클래식 컨템포러리',
+          tagline: '현대적인 무드의 포멀 룩',
+          description: `정제된 라인과 단색 조합으로 세련된 느낌을 강조한 스타일입니다.`,
+          items: ['네이비 슈트', '크림 블라우스', '로퍼', '레더 벨트', '레이어드 네크리스']
+        }
+      ],
+      '크롭/Y2K': [
+        {
+          title: 'Y2K 키트',
+          tagline: '레트로 무드의 컬러풀 룩',
+          description: `${ootd}의 복고적인 감성을 살리면서도 경쾌한 에너지를 담았습니다.`,
+          items: ['크롭 티셔츠', '로우 라이즈 진', '미니 백', '플랫폼 슈즈', '체인 목걸이']
+        },
+        {
+          title: '글리터 보헤미안',
+          tagline: '반짝이는 포인트로 눈길을 끄는 룩',
+          description: `화려한 소재와 글리터 디테일이 ${idol}의 무드를 더욱 드라마틱하게 만듭니다.`,
+          items: ['메탈릭 톱', '미니스커트', '스트랩 샌들', '미니 백', '링 이어링']
+        },
+        {
+          title: '네온 펑크',
+          tagline: '강렬한 컬러와 유니크한 디테일',
+          description: `강한 색감과 독특한 실루엣으로 ${vibeText}을 적극적으로 표현합니다.`,
+          items: ['네온 탱크탑', '바이커 쇼츠', '러너 슈즈', '버킷 햇', '웨이스트 백']
+        },
+        {
+          title: '하이틴 리바이벌',
+          tagline: '스쿨 무드의 경쾌한 복고',
+          description: `크롭 톱과 플레어 스커트의 조합으로 밝고 발랄한 Y2K 룩을 완성합니다.`,
+          items: ['크롭 셔츠', '플레어 미니스커트', '플랫폼 스니커즈', '헤어 클립', '백팩']
+        },
+        {
+          title: '모던 레이어드',
+          tagline: '복고와 현재가 만나는 레이어 스타일',
+          description: `크롭 톱 위에 레이어를 더해 균형감 있는 실루엣을 만든 스타일입니다.`,
+          items: ['크롭 니트', '메시 탱크톱', '데님 와이드 팬츠', '스니커즈', '체인 백']
+        }
+      ]
+    };
+
+    const selected = templates[ootd] || templates['캐주얼'];
+    return selected.slice(0, 5).map(style => ({
+      title: style.title,
+      tagline: style.tagline,
+      description: style.description,
+      items: style.items
+    }));
   }
 
   function renderResults(styles){

@@ -268,6 +268,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .results-head{ display:flex; align-items:baseline; gap:12px; margin-bottom:24px; flex-wrap:wrap; }
   .results-title{ font-family:var(--font-display); font-size:24px; font-weight:700; }
   .results-tag{ font-size:12px; color:var(--muted); }
+  .idol-ref-link{
+    margin-left:auto; display:none; align-items:center; gap:6px;
+    font-size:12.5px; font-weight:700; color:var(--pink); text-decoration:none;
+    border:1px solid var(--item-pill-border); background:var(--item-pill-bg);
+    padding:7px 13px; border-radius:999px; white-space:nowrap;
+  }
+  .idol-ref-link:hover{ filter:brightness(1.08); transform:translateY(-1px); }
 
   .style-list{ display:flex; flex-direction:column; gap:10px; }
   .style-row{
@@ -502,6 +509,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="results-head">
       <span class="results-title">추천 스타일 5</span>
       <span class="results-tag" id="resultsTag"></span>
+      <a class="idol-ref-link" id="idolRefLink" href="#" target="_blank" rel="noopener noreferrer"></a>
     </div>
     <div id="resultsBody"></div>
   </div>
@@ -643,6 +651,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   const resultsEl = document.getElementById('results');
   const resultsBody = document.getElementById('resultsBody');
   const resultsTag = document.getElementById('resultsTag');
+  const idolRefLink = document.getElementById('idolRefLink');
 
   // render OOTD cards with 2D line icons
   ootdGrid.innerHTML = OOTD_OPTIONS.map(o => `
@@ -779,6 +788,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     resultsTag.textContent = mode === 'photo'
       ? `사진 기반 · OOTD: ${ootd}`
       : `텍스트 기반 · ${genderLabel ? genderLabel + ' 무드 · ' : ''}${idol || '사용자'} × ${ootd}`;
+
+    // "내가 선택한 아이돌" 실제 사진은 저작권 문제로 우리 서버가 직접 긁어와 보여줄 수 없어서,
+    // 대신 해당 아이돌 + OOTD 키워드로 실제 이미지 검색 결과로 바로 연결해주는 링크를 노출합니다.
+    if (idol) {
+      const q = encodeURIComponent(`${idol} ${ootd} 패션 스타일`);
+      idolRefLink.href = `https://www.google.com/search?tbm=isch&q=${q}`;
+      idolRefLink.textContent = `🔍 ${idol} 실제 스타일 사진 보기`;
+      idolRefLink.style.display = 'inline-flex';
+    } else {
+      idolRefLink.style.display = 'none';
+    }
     resultsBody.innerHTML = `
       <div class="loading-wrap">
         <div class="spinner"></div>

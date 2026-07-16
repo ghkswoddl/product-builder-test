@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, make_response
 import urllib.request
 import urllib.parse
 import json
@@ -123,11 +123,18 @@ def index():
     ]
     
     # 루트에 있는 index.html을 로드하면서 데이터를 전달합니다.
-    return render_template('index.html', 
-                           idol_name="카리나", 
-                           group_name="에스파", 
-                           embed_code=sample_embed_code, 
-                           products=matching_items)
+    resp = make_response(render_template('index.html',
+                           idol_name="카리나",
+                           group_name="에스파",
+                           embed_code=sample_embed_code,
+                           products=matching_items))
+    # 배포 후에도 브라우저/프록시가 예전 버전을 계속 보여주는 것을 방지하기 위해
+    # 이 페이지는 캐시하지 않도록 명시합니다. (수정 반영이 안 되는 것처럼 보이는
+    # 문제의 흔한 원인 중 하나가 바로 이 캐시입니다.)
+    resp.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    resp.headers['Pragma'] = 'no-cache'
+    resp.headers['Expires'] = '0'
+    return resp
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

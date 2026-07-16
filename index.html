@@ -285,6 +285,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .results-head{ display:flex; align-items:baseline; gap:12px; margin-bottom:24px; flex-wrap:wrap; }
   .results-title{ font-family:var(--font-display); font-size:24px; font-weight:700; }
   .results-tag{ font-size:12px; color:var(--muted); }
+  .stale-notice{
+    display:none; align-items:center; gap:8px; margin-bottom:20px;
+    background:var(--error-bg); border:1px solid var(--error-border); color:var(--error-fg);
+    font-size:13px; font-weight:600; padding:12px 16px; border-radius:12px;
+  }
+  .stale-notice.show{ display:flex; }
   .photo-credit-badge{
     position:absolute; left:0; right:0; bottom:0; z-index:2;
     display:flex; align-items:center; gap:5px; padding:6px 8px;
@@ -555,6 +561,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span class="results-title">추천 스타일 5</span>
       <span class="results-tag" id="resultsTag"></span>
     </div>
+    <div class="stale-notice" id="staleNotice">⚠️ Idol / OOTD 선택이 바뀌었어요 — 아래 결과는 이전 설정 기준이에요. 다시 추천받기를 눌러주세요.</div>
     <div id="resultsBody"></div>
   </div>
 
@@ -695,6 +702,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   const resultsEl = document.getElementById('results');
   const resultsBody = document.getElementById('resultsBody');
   const resultsTag = document.getElementById('resultsTag');
+  const staleNotice = document.getElementById('staleNotice');
+
+  // 결과가 이미 화면에 있는 상태에서 Idol/OOTD/사진 등 입력이 바뀌면,
+  // "이 결과는 예전 설정 기준"이라는 걸 명확히 보여줍니다.
+  // (버튼을 다시 눌러야 실제로 재생성된다는 점을 헷갈리지 않도록)
+  function markResultsStale(){
+    if (resultsEl.style.display === 'block') {
+      staleNotice.classList.add('show');
+    }
+  }
 
   // render OOTD cards with 2D line icons
   ootdGrid.innerHTML = OOTD_OPTIONS.map(o => `
@@ -719,6 +736,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         selectedVibes.add(vibe);
         chip.classList.add('active');
       }
+      markResultsStale();
     });
   });
 
@@ -728,10 +746,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       card.classList.add('active');
       selectedOotd = card.dataset.key;
       updateCta();
+      markResultsStale();
     });
   });
 
-  idolInput.addEventListener('input', updateCta);
+  idolInput.addEventListener('input', () => { updateCta(); markResultsStale(); });
 
   // ---- 서버에서 전달된 아이돌 정보로 초기 상태 채우기 ----
   (function applyServerIdol(){
@@ -797,6 +816,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     photoInput.value = '';
     uploadPreview.classList.remove('show');
     updateCta();
+    markResultsStale();
   });
 
   function handlePhotoFile(file){
@@ -807,6 +827,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       previewImg.src = reader.result;
       uploadPreview.classList.add('show');
       updateCta();
+      markResultsStale();
     };
     reader.readAsDataURL(file);
   }
@@ -853,6 +874,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const vibes = Array.from(selectedVibes);
     const vibeText = vibes.length ? vibes.join(', ') : '자유로운 무드';
 
+    staleNotice.classList.remove('show');
     currentIdolGender = detectIdolGender(idol);
     const genderLabel = currentIdolGender === 'male' ? '남자 아이돌' : currentIdolGender === 'female' ? '여자 아이돌' : null;
 

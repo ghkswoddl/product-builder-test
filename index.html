@@ -278,11 +278,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
   .style-row.show{ opacity:1; transform:translateY(0); }
   .style-index{ font-family:var(--font-display); font-size:26px; font-weight:700; color:var(--line-num, var(--green)); opacity:0.85; }
+  .style-main{ display:flex; gap:24px; align-items:flex-start; }
+  .style-image{ flex:0 0 220px; width:220px; aspect-ratio:3/4; object-fit:cover; border-radius:12px; border:1px solid var(--line); }
+  .style-body{ flex:1; min-width:0; }
   .style-body h3{ font-family:var(--font-display); font-size:18px; font-weight:600; margin-bottom:6px; }
   .style-body .style-tagline{ color:var(--pink); font-size:12.5px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase; margin-bottom:10px; }
-  .style-body p{ color:var(--desc-fg); font-size:14px; line-height:1.75; margin-bottom:12px; max-width:70ch; }
+  .style-body p{ color:var(--desc-fg); font-size:16px; line-height:1.75; margin-bottom:12px; max-width:70ch; }
   .items-row{ display:flex; flex-wrap:wrap; gap:6px; }
-  .item-pill{ font-size:11.5px; font-weight:600; padding:5px 11px; border-radius:999px; background:var(--item-pill-bg); color:var(--item-pill-fg); border:1px solid var(--item-pill-border); }
+  .item-pill{ font-size:13.5px; font-weight:600; padding:5px 11px; border-radius:999px; background:var(--item-pill-bg); color:var(--item-pill-fg); border:1px solid var(--item-pill-border); }
 
   .loading-wrap{ display:flex; flex-direction:column; align-items:center; gap:16px; padding:40px 0; }
   .spinner{ width:34px; height:34px; border-radius:50%; border:3px solid var(--line); border-top-color:var(--green); animation:spin 0.8s linear infinite; }
@@ -318,18 +321,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   /* PLANS (컨설팅 플랜 카드) */
   .plans-section{ margin-top:0; padding-top:56px; }
   .plans-grid{ display:flex; gap:28px; flex-wrap:wrap; justify-content:center; margin-top:18px; }
-  .plan-card{ flex:1 1 260px; min-width:260px; max-width:360px; background:linear-gradient(180deg, var(--card), var(--card-hover)); border:1px solid var(--line); border-radius:14px; padding:18px; display:flex; flex-direction:column; gap:12px; min-height:340px; height:auto; justify-content:space-between; }
-  .plan-header{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
-  .plan-title{ font-family:var(--font-display); font-size:18px; font-weight:700; }
-  .plan-price{ font-size:20px; font-weight:800; color:var(--green); }
-  .plan-sub{ font-size:12.5px; color:var(--muted); }
-  .plan-features{ color:var(--desc-fg); font-size:13.5px; margin-top:6px; display:flex; flex-direction:column; gap:8px; }
+  .plan-card{ flex:1 1 400px; min-width:340px; width:400px; max-width:400px; background:linear-gradient(180deg, var(--card), var(--card-hover)); border:1px solid var(--line); border-radius:16px; padding:26px; display:flex; flex-direction:column; gap:16px; min-height:440px; height:auto; justify-content:space-between; }
+  .plan-header{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+  .plan-title{ font-family:var(--font-display); font-size:20px; font-weight:700; }
+  .plan-price{ font-size:22px; font-weight:800; color:var(--green); white-space:nowrap; }
+  .plan-sub{ font-size:13.5px; color:var(--muted); }
+  .plan-features{ color:var(--desc-fg); font-size:14.5px; line-height:1.55; margin-top:8px; display:flex; flex-direction:column; gap:10px; }
   .plan-feature{ display:flex; gap:10px; align-items:flex-start; }
-  .plan-feature .dot{ width:8px; height:8px; border-radius:50%; background:var(--pink); margin-top:6px; flex:0 0 8px; }
-  .plan-cta{ display:flex; gap:10px; align-items:center; margin-top:8px; }
-  .plan-cta .cta-btn{ width:100%; padding:0 18px; font-size:14px; height:48px; display:flex; align-items:center; justify-content:center; text-align:center; }
+  .plan-feature .dot{ width:8px; height:8px; border-radius:50%; background:var(--pink); margin-top:7px; flex:0 0 8px; }
+  .plan-cta{ display:flex; gap:10px; align-items:center; margin-top:10px; }
+  .plan-cta .cta-btn{ width:100%; padding:0 18px; font-size:15px; height:52px; display:flex; align-items:center; justify-content:center; text-align:center; }
   .pay-btn{ background:var(--green); color:#fff; box-shadow:0 12px 30px rgba(29,185,84,0.25); border:none; }
-  .plan-note{ font-size:12px; color:var(--muted); }
+  .plan-note{ font-size:13px; color:var(--muted); line-height:1.5; }
 
   footer{ text-align:center; margin-top:80px; color:#5c5c60; font-size:12px; }
 
@@ -343,7 +346,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .wrap{ max-width:100%; padding:76px 28px 100px; }
     .ootd-grid{ grid-template-columns:repeat(auto-fill, minmax(120px,1fr)); gap:10px; }
     h1{ font-size:clamp(30px, 5vw, 44px); }
-    .plan-card{ min-width:220px; }
+    .plan-card{ min-width:300px; width:100%; max-width:400px; }
+    .style-image{ flex-basis:170px; width:170px; }
   }
 
   /* MOBILE */
@@ -376,6 +380,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     .style-row{ grid-template-columns:1fr; padding:18px; gap:10px; }
     .style-index{ font-size:16px; }
+    .style-main{ flex-direction:column; gap:14px; }
+    .style-image{ width:100%; flex-basis:auto; max-width:none; }
     .style-body h3{ font-size:16.5px; }
 
     .consult-form{ padding:22px; }
@@ -527,74 +533,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <span class="consult-error" id="consultError">모든 항목을 올바르게 입력해주세요.</span>
       </div>
     </form>
-    <!-- 컨설팅 플랜 블록: 유료 플랜 참조하여 타깃(10~30대 학생·신입·패피 관심층)에 맞게 구성 -->
-    <div class="plans-section">
-      <div class="section-head">
-        <span class="section-num">05</span>
-        <span class="section-title">컨설팅 플랜</span>
-        <span class="section-hint">10~30대 학생·신입·패션 관심층에 최적화</span>
-      </div>
-      <div class="plans-grid">
-        <div class="plan-card">
-          <div class="plan-header">
-            <div>
-              <div class="plan-title">Starter (무료)</div>
-              <div class="plan-sub">가벼운 스타일 피드백 / 초보자 추천</div>
-            </div>
-            <div class="plan-price">무료</div>
-          </div>
-          <div class="plan-features">
-            <div class="plan-feature"><span class="dot"></span><div>간단한 스타일 진단 리포트(이메일)</div></div>
-            <div class="plan-feature"><span class="dot"></span><div>사진 기반 간단 피드백 제공</div></div>
-            <div class="plan-feature"><span class="dot"></span><div>학생·신입을 위한 예산 중심 코디 팁</div></div>
-          </div>
-          <div class="plan-note">대상: 예산을 고려하는 학생·초심자</div>
-          <div class="plan-cta">
-            <button class="cta-btn secondary" onclick="document.getElementById('consultMessage').focus();">이 플랜으로 상담하기</button>
-          </div>
-        </div>
-
-        <div class="plan-card">
-          <div class="plan-header">
-            <div>
-              <div class="plan-title">Pro (맞춤 리포트)</div>
-              <div class="plan-sub">월간 구독형 · 실용적 추천</div>
-            </div>
-            <div class="plan-price">월 17,000원</div>
-          </div>
-          <div class="plan-features">
-            <div class="plan-feature"><span class="dot"></span><div>퍼스널 스타일 리포트(PDF)</div></div>
-            <div class="plan-feature"><span class="dot"></span><div>1:1 스타일 콜 30분(월 1회)</div></div>
-            <div class="plan-feature"><span class="dot"></span><div>옷장 매칭 및 10일치 데일리 코디 제안</div></div>
-            <div class="plan-feature"><span class="dot"></span><div>학생·신입 대상 할인 및 우선 응답</div></div>
-          </div>
-          <div class="plan-note">대상: 10~30대, 실용적 코디를 선호하는 분</div>
-          <div class="plan-cta">
-            <button class="cta-btn pay-btn" onclick="initiateCheckout('pro')">결제하기</button>
-          </div>
-        </div>
-
-        <div class="plan-card">
-          <div class="plan-header">
-            <div>
-              <div class="plan-title">Premium (퍼스널 VIP)</div>
-              <div class="plan-sub">심층 컨설팅 · 쇼핑 지원 포함</div>
-            </div>
-            <div class="plan-price">월 100,000원부터</div>
-          </div>
-          <div class="plan-features">
-            <div class="plan-feature"><span class="dot"></span><div>심층 스타일 전략 및 시즌별 룩북 제공</div></div>
-            <div class="plan-feature"><span class="dot"></span><div>퍼스널 쇼퍼 추천 및 구매 가이드</div></div>
-            <div class="plan-feature"><span class="dot"></span><div>월 2회 1:1 스타일 세션 및 우선 예약</div></div>
-            <div class="plan-feature"><span class="dot"></span><div>하이엔드·포인트 룩 구성 지원</div></div>
-          </div>
-          <div class="plan-note">대상: 스타일 심화를 원하거나 쇼핑 대행을 희망하는 분</div>
-          <div class="plan-cta">
-            <button class="cta-btn pay-btn" onclick="initiateCheckout('premium')">맞춤 상담/결제</button>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <footer>STYLE MATCH — idol mood × ootd style recommender</footer>
@@ -625,12 +563,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   const ICON_ATTRS = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"';
   const ICONS = {
     '캐주얼': `<svg ${ICON_ATTRS}><path d="M8.2 3.6 4 7v3.2h2.6V20.4h10.8V10.2H20V7l-4.2-3.4-2 1.8h-3.6l-2-1.8Z"/></svg>`,
-    '스트릿': `<svg ${ICON_ATTRS}><path d="M4 15.5c0-4.4 3.6-8 8-8s8 3.6 8 8"/><path d="M4 15.5h16"/><path d="M15.2 15.5c1.9 0 3.7.4 5.2 1.3"/><path d="M12 7.5V4.5"/></svg>`,
-    '페미닌': `<svg ${ICON_ATTRS}><path d="M12 12 4 7.2v9.6L12 12Z"/><path d="M12 12 20 7.2v9.6L12 12Z"/><circle cx="12" cy="12" r="1.5"/></svg>`,
-    '미니멀': `<svg ${ICON_ATTRS}><path d="M12 4a2 2 0 1 1 1.8 2c-.7.4-1.3.9-1.3 1.6V9"/><path d="M12 9 3 15.6 4.6 18.4h14.8L21 15.6 12 9Z"/></svg>`,
-    '스포티': `<svg ${ICON_ATTRS}><path d="M3.2 16.6c0-1 .8-1.7 1.7-2.1l3-1.2c.6-.3 1-.9 1-1.5V9.6l2.2 1.9c.6.5 1.4.8 2.2.8h3.1c1.7 0 3.1 1.4 3.1 3.1v1.2c0 .9-.7 1.6-1.6 1.6H4.6c-.8 0-1.4-.6-1.4-1.4v-.2Z"/><path d="M6.4 12.4v-3"/></svg>`,
-    '빈티지': `<svg ${ICON_ATTRS}><rect x="3.4" y="7.6" width="17.2" height="12" rx="1.8"/><circle cx="12" cy="13.6" r="3.3"/><path d="M8 7.6 9.2 5.2h5.6L16 7.6"/></svg>`,
-    '포멀': `<svg ${ICON_ATTRS}><path d="M9.4 3.2h5.2l-1 3-1.6 1-1.6-1-1-3Z"/><path d="M12 7.2l2.8 10.6-2.8 3-2.8-3L12 7.2Z"/></svg>`,
+    '스트릿': `<svg ${ICON_ATTRS}><path d="M4 15.5c0-4.4 3.6-8 8-8s8 3.6 8 8"/><path d="M3 15.5h13.5"/><path d="M16.5 15.5c2.1 0 4.2.5 5.8 1.7"/><circle cx="12" cy="5.4" r="1.1" fill="currentColor" stroke="none"/></svg>`,
+    '페미닌': `<svg ${ICON_ATTRS}><path d="M12 3.2c-1 0-1.7.8-1.7 1.7 0 .5.2 1 .6 1.3L9 17.6c-.2 1.2.8 2.3 2 2.3h2c1.2 0 2.2-1.1 2-2.3l-1.9-11.4c.4-.3.6-.8.6-1.3 0-.9-.8-1.7-1.7-1.7Z"/></svg>`,
+    '미니멀': `<svg ${ICON_ATTRS}><path d="M10.3 4.6a1.7 1.7 0 1 1 3.4 0c0 .6-.3 1.1-.8 1.4L12 6.6v1.6"/><path d="M4 19.4l8-6.2 8 6.2"/><path d="M4 19.4h16"/></svg>`,
+    '스포티': `<svg ${ICON_ATTRS}><path d="M3.2 16.6c0-1 .8-1.7 1.7-2.1l3-1.2c.6-.3 1-.9 1-1.5V9.6l2.2 1.9c.6.5 1.4.8 2.2.8h3.1c1.7 0 3.1 1.4 3.1 3.1v1.2c0 .9-.7 1.6-1.6 1.6H4.6c-.8 0-1.4-.6-1.4-1.4v-.2Z"/><path d="M4.4 16.2h14.8"/><path d="M9 11.6l1.7 1.5M11.2 10.4l1.7 1.5"/></svg>`,
+    '빈티지': `<svg ${ICON_ATTRS}><rect x="3.4" y="7.6" width="17.2" height="12" rx="1.8"/><circle cx="12" cy="13.6" r="3.3"/><path d="M8 7.6 9.2 5.2h5.6L16 7.6"/><rect x="15.4" y="9.6" width="2.6" height="1.8" rx=".4"/></svg>`,
+    '포멀': `<svg ${ICON_ATTRS}><path d="M9.4 3.2h5.2l-1 3-1.6 1-1.6-1-1-3Z"/><path d="M12 7.2l2.6 4.4-1.1 1.7 1.1 5.5-2.6 2-2.6-2 1.1-5.5-1.1-1.7 2.6-4.4Z"/></svg>`,
     '크롭/Y2K': `<svg ${ICON_ATTRS}><path d="M12 3v4.2M12 16.8V21M3 12h4.2M16.8 12H21M6.1 6.1l2.5 2.5M15.4 15.4l2.5 2.5M17.9 6.1l-2.5 2.5M8.6 15.4l-2.5 2.5"/></svg>`,
   };
 
@@ -646,15 +584,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   ];
 
   // Verified, working Unsplash photo URLs (checked one by one so the cards never
-  // show a broken-image icon). Mixed gender so results feel varied regardless of
-  // which OOTD style the user picked. Each style category cycles through this
-  // same verified pool with a different crop param for a bit of visual variety.
-  const MODEL_PHOTOS = [
-    'https://images.unsplash.com/photo-1746184070706-4a325bcc05d7?q=80&w=600&auto=format&fit=crop', // female, casual street style
+  // show a broken-image icon).
+  const MALE_PHOTOS = [
     'https://images.unsplash.com/photo-1730163919445-e1ee1409e1ae?q=80&w=600&auto=format&fit=crop', // male, hoodie street style
-    'https://images.unsplash.com/photo-1603829688511-d7c04ad359fc?q=80&w=600&auto=format&fit=crop', // female, knit sweater casual
     'https://images.unsplash.com/photo-1595171603847-0b331c4ac892?q=80&w=600&auto=format&fit=crop', // male, formal suit
   ];
+  const FEMALE_PHOTOS = [
+    'https://images.unsplash.com/photo-1746184070706-4a325bcc05d7?q=80&w=600&auto=format&fit=crop', // female, casual street style
+    'https://images.unsplash.com/photo-1603829688511-d7c04ad359fc?q=80&w=600&auto=format&fit=crop', // female, knit sweater casual
+  ];
+  const MODEL_PHOTOS = [...FEMALE_PHOTOS, ...MALE_PHOTOS];
 
   const STYLE_IMAGES = {
     '캐주얼': MODEL_PHOTOS,
@@ -667,9 +606,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     '크롭/Y2K': [MODEL_PHOTOS[2], MODEL_PHOTOS[1], MODEL_PHOTOS[0], MODEL_PHOTOS[3]]
   };
 
+  // ---- idol gender detection ----
+  // Looks at the free-text idol name/keyword the user typed and guesses whether
+  // they mean a male or female idol, so the result photos + copy can reflect it.
+  const MALE_IDOL_HINTS = ['남자', '보이그룹', '보이 그룹', '남돌', 'boy group', 'male idol'];
+  const FEMALE_IDOL_HINTS = ['여자', '걸그룹', '걸 그룹', '여돌', 'girl group', 'female idol'];
+  const KNOWN_MALE_IDOLS = ['뷔', 'RM', '알엠', '정국', '지민', '진', '슈가', '제이홉', '민호', '키', '태민', '온유', '종현',
+    '시우민', '디오', '백현', '찬열', '카이', '수호', '세훈', '우지', '호시', '민규', '도겸', '버논', '에스쿱스', '원우',
+    '마크', '태용', '재현', '도영', '지성', '해찬', '런쥔', '지훈', '한', '리노', '필릭스', '창빈', '현진'];
+  const KNOWN_FEMALE_IDOLS = ['아이유', '카리나', '태연', '제니', '지수', '로제', '리사', '윈터', '닝닝', '설윤', '리즈',
+    '안유진', '장원영', '민지', '해린', '다니엘', '혜인', '채영', '쯔위', '나연', '정연', '모모', '사나', '미나', '다현',
+    '솔라', '문별', '휘인', '화사', '유진', '유나', '카즈하', '이서', '가을'];
+
+  function detectIdolGender(name){
+    if (!name) return null;
+    const lower = name.toLowerCase();
+    if (MALE_IDOL_HINTS.some(h => lower.includes(h.toLowerCase()))) return 'male';
+    if (FEMALE_IDOL_HINTS.some(h => lower.includes(h.toLowerCase()))) return 'female';
+    if (KNOWN_MALE_IDOLS.some(n => name.includes(n))) return 'male';
+    if (KNOWN_FEMALE_IDOLS.some(n => name.includes(n))) return 'female';
+    return null;
+  }
+
   let selectedVibes = new Set();
   let selectedOotd = null;
   let uploadedPhoto = null; // { base64, mediaType }
+  let currentIdolGender = null; // 'male' | 'female' | null — detected from idol input text
 
   const idolInput = document.getElementById('idolInput');
   const vibeChips = document.getElementById('vibeChips');
@@ -805,6 +767,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const vibes = Array.from(selectedVibes);
     const vibeText = vibes.length ? vibes.join(', ') : '자유로운 무드';
 
+    currentIdolGender = detectIdolGender(idol);
+    const genderLabel = currentIdolGender === 'male' ? '남자 아이돌' : currentIdolGender === 'female' ? '여자 아이돌' : null;
+
     const activeBtn = mode === 'photo' ? ctaPhotoBtn : ctaBtn;
     const otherBtn = mode === 'photo' ? ctaBtn : ctaPhotoBtn;
     activeBtn.disabled = true;
@@ -813,7 +778,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     resultsEl.style.display = 'block';
     resultsTag.textContent = mode === 'photo'
       ? `사진 기반 · OOTD: ${ootd}`
-      : `텍스트 기반 · ${idol || '사용자'} × ${ootd}`;
+      : `텍스트 기반 · ${genderLabel ? genderLabel + ' 무드 · ' : ''}${idol || '사용자'} × ${ootd}`;
     resultsBody.innerHTML = `
       <div class="loading-wrap">
         <div class="spinner"></div>
@@ -1116,13 +1081,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       styles.map((s, i) => `
         <div class="style-row" style="--line-num:${i % 2 === 0 ? 'var(--green)' : 'var(--pink)'}">
           <div class="style-index">${String(i+1).padStart(2,'0')}</div>
-          <div class="style-body">
-            <div style="margin-bottom:12px"><img src="${imgs[i]}" alt="style ${i+1}" loading="lazy" style="width:100%; max-width:420px; aspect-ratio:3/4; object-fit:cover; border-radius:12px; display:block; margin:0 auto; border:1px solid var(--line);" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';"/></div>
-            <h3>${escapeHtml(s.title || '')}</h3>
-            <div class="style-tagline">${escapeHtml(s.tagline || '')}</div>
-            <p>${escapeHtml(s.description || '')}</p>
-            <div class="items-row">
-              ${(s.items || []).map(it => `<span class="item-pill">${escapeHtml(it)}</span>`).join('')}
+          <div class="style-main">
+            <img class="style-image" src="${imgs[i]}" alt="style ${i+1}" loading="lazy" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';"/>
+            <div class="style-body">
+              <h3>${escapeHtml(s.title || '')}</h3>
+              <div class="style-tagline">${escapeHtml(s.tagline || '')}</div>
+              <p>${escapeHtml(s.description || '')}</p>
+              <div class="items-row">
+                ${(s.items || []).map(it => `<span class="item-pill">${escapeHtml(it)}</span>`).join('')}
+              </div>
             </div>
           </div>
         </div>
@@ -1139,10 +1106,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   // Fallback image if a curated Unsplash link ever fails to load
   const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1746184070706-4a325bcc05d7?q=80&w=600&auto=format&fit=crop';
 
-  // Pick a K-pop fashion / casual-style model photo (mixed gender) for the given
-  // OOTD category and card index. Works the same whether the user typed idol
-  // info or uploaded their own photo — no canvas compositing needed.
+  // Pick a K-pop fashion / casual-style model photo for the given OOTD category
+  // and card index. If the idol input clearly reads as male or female, the
+  // photo pool is narrowed to that gender; otherwise it stays mixed.
   function pickStyleImage(idx){
+    if (currentIdolGender === 'male') return MALE_PHOTOS[idx % MALE_PHOTOS.length];
+    if (currentIdolGender === 'female') return FEMALE_PHOTOS[idx % FEMALE_PHOTOS.length];
     const styleImages = STYLE_IMAGES[selectedOotd] || STYLE_IMAGES['캐주얼'];
     return styleImages[idx % styleImages.length];
   }

@@ -173,7 +173,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .idol-input::placeholder{ color:#6b6b6f; }
   .idol-input:focus{ border-color:var(--green); background:var(--card-hover); }
 
+  .idol-group-badge{
+    display:inline-flex; align-items:center; gap:6px; margin:10px 0 14px;
+    font-size:12.5px; font-weight:700; color:var(--green);
+    background:var(--item-pill-bg); border:1px solid var(--item-pill-border);
+    padding:6px 12px; border-radius:999px;
+  }
   .vibe-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .matching-items{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+  .matching-item-card{
+    display:flex; align-items:center; gap:10px; background:var(--card); border:1px solid var(--line);
+    border-radius:12px; padding:8px 12px 8px 8px; text-decoration:none; color:inherit;
+  }
+  .matching-item-card:hover{ border-color:var(--green); background:var(--card-hover); }
+  .matching-item-card img{ width:38px; height:38px; border-radius:8px; object-fit:cover; flex:0 0 38px; }
+  .matching-item-card .mi-body{ display:flex; flex-direction:column; gap:2px; }
+  .matching-item-card .mi-brand{ font-size:10.5px; font-weight:700; color:var(--muted); letter-spacing:.03em; text-transform:uppercase; }
+  .matching-item-card .mi-name{ font-size:12.5px; font-weight:600; max-width:200px; }
+  .matching-item-card .mi-price{ font-size:12px; font-weight:700; color:var(--green); }
   .chip{
     font-family:var(--font-body); font-weight:600; font-size:13px;
     padding:9px 15px; border-radius:999px; border:1px solid var(--line);
@@ -417,6 +434,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 <div class="atmosphere"></div>
 
+<script>
+  // Flask의 index() 라우트에서 render_template()에 전달한 값들을 그대로 주입합니다.
+  // (app.py: idol_name, group_name, embed_code, products)
+  //
+  // 주의: 이 파일을 Flask 없이 정적 파일로 직접 열면(app.py 미실행) Jinja 변수 치환 문법이
+  // 그대로 남아있어 JS 문법 오류가 납니다.
+  // 그런 경우에도 페이지가 깨지지 않도록 JSON.parse를 try/catch로 감싸고
+  // 기본값으로 대체합니다.
+  let SERVER_DATA = { idolName: '', groupName: '', products: [] };
+  try {
+    SERVER_DATA = JSON.parse(document.getElementById('serverDataJson').textContent);
+  } catch (e) {
+    console.warn('SERVER_DATA를 불러오지 못해 기본값을 사용합니다. (app.py를 통해 실행했는지 확인해주세요)', e.message);
+  }
+</script>
+<script type="application/json" id="serverDataJson">
+{"idolName": {{ idol_name|tojson }}, "groupName": {{ group_name|tojson }}, "products": {{ products|tojson }}}
+</script>
+
 <button class="theme-toggle" id="themeToggle" aria-label="다크모드/라이트모드 전환" title="테마 전환">
   <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="12" r="4.2"></circle>
@@ -451,6 +487,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="idol-input-row">
       <input type="text" class="idol-input" id="idolInput" placeholder="예: 아이유, 카리나, 뷔, RM, 태연... 자유롭게 입력해주세요" maxlength="40">
     </div>
+    <div class="idol-group-badge" id="idolGroupBadge" style="display:none;"></div>
+    <div class="matching-items" id="matchingItems" style="display:none;"></div>
     <div class="vibe-chips" id="vibeChips">
       <div class="chip" data-vibe="걸크러시">걸크러시</div>
       <div class="chip" data-vibe="청순">청순</div>
@@ -689,6 +727,40 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   });
 
   idolInput.addEventListener('input', updateCta);
+
+  // ---- 서버에서 전달된 아이돌 정보로 초기 상태 채우기 ----
+  (function applyServerIdol(){
+    const idolGroupBadge = document.getElementById('idolGroupBadge');
+    if (SERVER_DATA.idolName) {
+      idolInput.value = SERVER_DATA.idolName;
+    }
+    if (SERVER_DATA.groupName) {
+      idolGroupBadge.textContent = `🎤 ${SERVER_DATA.groupName}`;
+      idolGroupBadge.style.display = 'inline-flex';
+    }
+    renderMatchingItems(SERVER_DATA.products);
+    updateCta();
+  })();
+
+  function renderMatchingItems(products){
+    const el = document.getElementById('matchingItems');
+    if (!products || !products.length) { el.style.display = 'none'; return; }
+    el.innerHTML = products.map(p => `
+      <a class="matching-item-card" href="${escapeAttr(p.shop_link || '#')}" target="_blank" rel="noopener noreferrer">
+        <img src="${escapeAttr(p.image)}" alt="${escapeAttr(p.name)}" onerror="this.style.display='none'">
+        <div class="mi-body">
+          <span class="mi-brand">${escapeHtml(p.brand || '')}</span>
+          <span class="mi-name">${escapeHtml(p.name || '')}</span>
+          <span class="mi-price">${escapeHtml(p.price || '')}</span>
+        </div>
+      </a>
+    `).join('');
+    el.style.display = 'flex';
+  }
+
+  function escapeAttr(str){
+    return String(str || '').replace(/"/g, '&quot;');
+  }
 
   // ---- photo upload ----
   const uploadZone = document.getElementById('uploadZone');

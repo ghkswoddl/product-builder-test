@@ -285,13 +285,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .results-head{ display:flex; align-items:baseline; gap:12px; margin-bottom:24px; flex-wrap:wrap; }
   .results-title{ font-family:var(--font-display); font-size:24px; font-weight:700; }
   .results-tag{ font-size:12px; color:var(--muted); }
-  .idol-ref-link{
-    margin-left:auto; display:none; align-items:center; gap:6px;
-    font-size:12.5px; font-weight:700; color:var(--pink); text-decoration:none;
-    border:1px solid var(--item-pill-border); background:var(--item-pill-bg);
-    padding:7px 13px; border-radius:999px; white-space:nowrap;
+  .photo-credit-badge{
+    position:absolute; left:0; right:0; bottom:0; z-index:2;
+    display:flex; align-items:center; gap:5px; padding:6px 8px;
+    font-size:9.5px; line-height:1.35; color:#fff;
+    background:linear-gradient(0deg, rgba(0,0,0,0.72), rgba(0,0,0,0));
+    text-decoration:none; border-bottom-left-radius:12px; border-bottom-right-radius:12px;
   }
-  .idol-ref-link:hover{ filter:brightness(1.08); transform:translateY(-1px); }
+  .photo-credit-badge:hover{ text-decoration:underline; }
+  .real-photo-tag{
+    position:absolute; top:8px; left:8px; z-index:2;
+    font-size:10px; font-weight:800; letter-spacing:.02em; color:#06280f;
+    background:var(--green); padding:3px 9px; border-radius:999px;
+  }
 
   .style-list{ display:flex; flex-direction:column; gap:10px; }
   .style-row{
@@ -303,7 +309,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .style-row.show{ opacity:1; transform:translateY(0); }
   .style-index{ font-family:var(--font-display); font-size:26px; font-weight:700; color:var(--line-num, var(--green)); opacity:0.85; }
   .style-main{ display:flex; gap:24px; align-items:flex-start; }
-  .style-image{ flex:0 0 220px; width:220px; aspect-ratio:3/4; object-fit:cover; border-radius:12px; border:1px solid var(--line); }
+  .style-image-wrap{ position:relative; flex:0 0 220px; width:220px; }
+  .style-image{ display:block; width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:12px; border:1px solid var(--line); }
   .style-body{ flex:1; min-width:0; }
   .style-body h3{ font-family:var(--font-display); font-size:18px; font-weight:600; margin-bottom:6px; }
   .style-body .style-tagline{ color:var(--pink); font-size:12.5px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase; margin-bottom:10px; }
@@ -371,7 +378,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .ootd-grid{ grid-template-columns:repeat(auto-fill, minmax(120px,1fr)); gap:10px; }
     h1{ font-size:clamp(30px, 5vw, 44px); }
     .plan-card{ min-width:300px; width:100%; max-width:400px; }
-    .style-image{ flex-basis:170px; width:170px; }
+    .style-image-wrap{ flex-basis:170px; width:170px; }
   }
 
   /* MOBILE */
@@ -405,7 +412,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .style-row{ grid-template-columns:1fr; padding:18px; gap:10px; }
     .style-index{ font-size:16px; }
     .style-main{ flex-direction:column; gap:14px; }
-    .style-image{ width:100%; flex-basis:auto; max-width:none; }
+    .style-image-wrap{ width:100%; flex-basis:auto; max-width:none; }
     .style-body h3{ font-size:16.5px; }
 
     .consult-form{ padding:22px; }
@@ -547,7 +554,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="results-head">
       <span class="results-title">추천 스타일 5</span>
       <span class="results-tag" id="resultsTag"></span>
-      <a class="idol-ref-link" id="idolRefLink" href="#" target="_blank" rel="noopener noreferrer"></a>
     </div>
     <div id="resultsBody"></div>
   </div>
@@ -689,7 +695,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   const resultsEl = document.getElementById('results');
   const resultsBody = document.getElementById('resultsBody');
   const resultsTag = document.getElementById('resultsTag');
-  const idolRefLink = document.getElementById('idolRefLink');
 
   // render OOTD cards with 2D line icons
   ootdGrid.innerHTML = OOTD_OPTIONS.map(o => `
@@ -861,16 +866,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       ? `사진 기반 · OOTD: ${ootd}`
       : `텍스트 기반 · ${genderLabel ? genderLabel + ' 무드 · ' : ''}${idol || '사용자'} × ${ootd}`;
 
-    // "내가 선택한 아이돌" 실제 사진은 저작권 문제로 우리 서버가 직접 긁어와 보여줄 수 없어서,
-    // 대신 해당 아이돌 + OOTD 키워드로 실제 이미지 검색 결과로 바로 연결해주는 링크를 노출합니다.
-    if (idol) {
-      const q = encodeURIComponent(`${idol} ${ootd} 패션 스타일`);
-      idolRefLink.href = `https://www.google.com/search?tbm=isch&q=${q}`;
-      idolRefLink.textContent = `🔍 ${idol} 실제 스타일 사진 보기`;
-      idolRefLink.style.display = 'inline-flex';
-    } else {
-      idolRefLink.style.display = 'none';
-    }
+    // "내가 선택한 아이돌"의 실제 사진은, 우리 서버가 위키미디어 커먼즈(Wikimedia Commons)에서
+    // 재사용이 허용된(퍼블릭 도메인/CC 라이선스) 사진만 찾아서 돌려줍니다. 못 찾으면
+    // null이 되고, 이 경우 기존처럼 스톡 이미지로 대체됩니다.
+    const realPhoto = idol ? await fetchIdolPhoto(idol) : null;
+
     resultsBody.innerHTML = `
       <div class="loading-wrap">
         <div class="spinner"></div>
@@ -882,7 +882,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     try {
       await new Promise(resolve => setTimeout(resolve, 700));
       const styles = generateLocalStyles(mode, ootd, idol || '스타일', vibeText);
-      await renderResults(styles, mode);
+      await renderResults(styles, mode, realPhoto);
     } catch (err) {
       console.error(err);
       resultsBody.innerHTML = `
@@ -1165,16 +1165,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }));
   }
 
-  async function renderResults(styles, mode){
+  async function renderResults(styles, mode, realPhoto){
     // pick a real Unsplash fashion photo for each style card
     const imgs = styles.map((s, i) => pickStyleImage(i));
 
     resultsBody.innerHTML = `<div class="style-list">${
-      styles.map((s, i) => `
+      styles.map((s, i) => {
+        // 커먼즈에서 실제 아이돌 사진을 찾았다면 첫 번째 카드의 이미지 자리에 바로 보여줍니다.
+        // (나머지 카드는 해당 사진이 그 코디를 실제로 입은 사진이 아니므로 스톡 이미지를 유지)
+        const useRealPhoto = i === 0 && realPhoto;
+        const imgSrc = useRealPhoto ? realPhoto.imageUrl : imgs[i];
+        const badge = useRealPhoto ? `<span class="real-photo-tag">실제 사진</span>` : '';
+        const credit = useRealPhoto
+          ? `<a class="photo-credit-badge" href="${escapeAttr(realPhoto.sourceUrl)}" target="_blank" rel="noopener noreferrer">
+               ${escapeHtml(realPhoto.artist || 'Wikimedia Commons')} · ${escapeHtml(realPhoto.license || '')}
+             </a>`
+          : '';
+        return `
         <div class="style-row" style="--line-num:${i % 2 === 0 ? 'var(--green)' : 'var(--pink)'}">
           <div class="style-index">${String(i+1).padStart(2,'0')}</div>
           <div class="style-main">
-            <img class="style-image" src="${imgs[i]}" alt="style ${i+1}" loading="lazy" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';"/>
+            <div class="style-image-wrap">
+              ${badge}
+              <img class="style-image" src="${imgSrc}" alt="style ${i+1}" loading="lazy" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';"/>
+              ${credit}
+            </div>
             <div class="style-body">
               <h3>${escapeHtml(s.title || '')}</h3>
               <div class="style-tagline">${escapeHtml(s.tagline || '')}</div>
@@ -1185,7 +1200,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
           </div>
         </div>
-      `).join('')
+      `;
+      }).join('')
     }</div>`;
 
     requestAnimationFrame(() => {
@@ -1193,6 +1209,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         setTimeout(() => row.classList.add('show'), i * 110);
       });
     });
+  }
+
+  // 우리 서버(app.py)의 /api/idol-photo 를 호출해, 위키미디어 커먼즈의 자유 라이선스
+  // 사진을 가져옵니다. 못 찾거나 요청이 실패하면 null을 반환해서 스톡 이미지로 대체됩니다.
+  async function fetchIdolPhoto(name){
+    try {
+      const res = await fetch(`/api/idol-photo?name=${encodeURIComponent(name)}`);
+      if (!res.ok) return null;
+      const data = await res.json();
+      return (data && data.found && data.imageUrl) ? data : null;
+    } catch (e) {
+      console.warn('실제 사진을 불러오지 못해 스톡 이미지로 대체합니다:', e.message);
+      return null;
+    }
   }
 
   // Fallback image if a curated Unsplash link ever fails to load
